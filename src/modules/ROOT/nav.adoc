@@ -7,7 +7,7 @@
 // and no breadcrumb trail is shown.
 
 * xref:index.adoc[Thoughts]
-** xref:margaret-hamilton.adoc[Margaret Hamilton, software engineer]
+** xref:margaret-hamilton.adoc[Margaret Hamilton, the first software engineer, 1936-2026]
 ** xref:reverse-interviews.adoc[Reverse interviews]
 ** xref:mythical-man-month-50.adoc[The Mythical Man-Month at 50]
 ** xref:the-quality-without-a-name.adoc[The (software) quality without a name]
