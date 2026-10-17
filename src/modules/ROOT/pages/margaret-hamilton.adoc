@@ -5,11 +5,12 @@ Kieran Potts, 18 October 2026
 :nofooter:
 
 :link-bbc-last-word-2026: https://www.bbc.co.uk/sounds/play/m0032rd9
-:link-guardian-2019:      https://www.theguardian.com/technology/2019/jul/13/margaret-hamilton-computer-scientist-interview-software-apollo-missions-1969-moon-landing-nasa-women
-:link-guardian-2026:      https://www.theguardian.com/science/2026/oct/07/margaret-hamilton-moon-computer-software
-:link-wikipedia:          https://en.wikipedia.org/wiki/Margaret_Hamilton_(software_engineer)
+:link-guardian-2019: https://www.theguardian.com/technology/2019/jul/13/margaret-hamilton-computer-scientist-interview-software-apollo-missions-1969-moon-landing-nasa-women
+:link-guardian-2026: https://www.theguardian.com/science/2026/oct/07/margaret-hamilton-moon-computer-software
+:link-mit-news: https://news.mit.edu/2026/margaret-hamilton-computing-pioneer-dies-1007
+:link-wikipedia: https://en.wikipedia.org/wiki/Margaret_Hamilton_(software_engineer)
 
-{link-wikipedia}[Margaret Hamilton] died on 30 September in Cambridge, Massachusetts, aged 90. She led the team at MIT that wrote the onboard flight software for the Apollo program, including the code that landed the first humans on the Moon. She is also widely credited with coining the term "`software engineering`".
+The Massachusetts Institute of Technology (MIT) has {link-mit-news}[announced] that Margaret Hamilton died on 30 September in Cambridge, Massachusetts, aged 90. She led the team at MIT that wrote the onboard flight software for the Apollo program, including the code that landed the first humans on the Moon. She is also widely credited with coining the term "`software engineering`".
 
 Hamilton is often called the first software engineer. That's not quite literally true, of course – plenty of people were programming computers before her. But she was the first to insist that what they were doing was _engineering_, and to practice it as a discipline that demanded the same rigor as any other engineering field.
 
