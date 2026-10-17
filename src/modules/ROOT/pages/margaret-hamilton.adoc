@@ -81,11 +81,9 @@ We have far more powerful tools today. But the principles have not changed. Anti
 
 And take the work seriously. It is engineering, after all. Margaret Hamilton made sure of that.
 
-// TODO: Close with a portrait, matching the Fred Brooks post, eg:
-//
-// .Margaret Heafield Hamilton, 1936-2026
-// [#img-margaret-hamilton,link=<source URL>]
-// image::photos/margaret-hamilton.jpg["<credit and license>"]
+.Margaret Heafield Hamilton, 1936-2026
+[#img-margaret-hamilton,link=https://commons.wikimedia.org/wiki/File:Margaret_Hamilton.gif]
+image::photos/margaret-hamilton.jpg["Photo by Draper Laboratory, 1969, public domain (US)"]
 
 == References
 
