@@ -35,9 +35,9 @@ It is hard to overstate how unforgiving the Apollo software project was. The htt
 
 In this environment, Hamilton's team pioneered many ideas that we now take for granted: asynchronous processing, priority scheduling, xref:garden::fault-tolerance.adoc[fault detection and recovery], and what the White House would later describe as "`human-in-the-loop decision capability`". The famous photograph of Hamilton, taken in 1969, shows her standing beside a stack of printed program listings as tall as she is. That stack is the source code for the Apollo Guidance Computer – which, since 2016, has been https://github.com/chrislgarry/Apollo-11[available to read on GitHub].
 
-// TODO: Add the 1969 photo of Hamilton beside the AGC source listings.
-// The original is a Draper Laboratory photo, released to the public
-// domain; a copy is on Wikimedia Commons.
+.Margaret Hamilton beside the Apollo Guidance Computer source listings, 1969
+[#img-margaret-hamilton,link=https://commons.wikimedia.org/wiki/File:Margaret_Hamilton.gif]
+image::photos/margaret-hamilton.jpg["Photo by Draper Laboratory, 1969, public domain (US)"]
 
 == "`That would never happen`"
 
@@ -83,8 +83,8 @@ We have far more powerful tools today. But the principles have not changed. Anti
 And take the work seriously. It is engineering, after all. Margaret Hamilton made sure of that.
 
 .Margaret Heafield Hamilton, 1936-2026
-[#img-margaret-hamilton,link=https://commons.wikimedia.org/wiki/File:Margaret_Hamilton.gif]
-image::photos/margaret-hamilton.jpg["Photo by Draper Laboratory, 1969, public domain (US)"]
+[#img-margaret-hamilton-1995,link=https://commons.wikimedia.org/wiki/File:Margaret_Hamilton_1995.jpg]
+image::photos/margaret-hamilton-1995.jpg["Photo by Daphne Weld Nichols, 1995, CC BY-SA 3.0"]
 
 == References
 
