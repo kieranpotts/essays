@@ -42,9 +42,9 @@ ____
 
 Hamilton started out writing software for the uncrewed missions, and went on to become director of the lab's software division, responsible for the flight software of both the Apollo command module and the lunar module.
 
-The {link-wikipedia-agc}[Apollo Guidance Computer] was essential to getting people to the moon. It automated the complex mathematics necessary to navigate the spacecraft, without which piloting would have been impossible. It was one of the earliest digital computers, and one of the first xref:garden::safety-critical-system.adoc[safety-critical systems]. It had to work perfectly.
+The {link-wikipedia-agc}[Apollo Guidance Computer] was essential to getting people to the Moon. It automated the complex mathematics necessary to navigate the spacecraft, without which piloting would have been impossible. It was one of the earliest digital computers, and one of the first xref:garden::safety-critical-system.adoc[safety-critical systems]. It had to work perfectly.
 
-It is hard to overstate how little margin for error there was in the system. It had about 72KB of read-only memory and 4KB of RAM. Its programs were stored in core rope memory – literally woven by hand, wire by wire, through and around magnetic cores. Once woven, the code could not be changed. The software would be running in a  nearly a quarter of a million miles from Earth, with human lives depending on its xref:garden::correctness.adoc[correctness] and xref:garden::availability.adoc[availability]. There could be no bugs in the software, since there would be no way to patch it mid-flight. And it had to be recoverable from every error condition.
+It is hard to overstate how little margin for error there was in the system. It had about 72KB of read-only memory and 4KB of RAM. Its programs were stored in core rope memory – literally woven by hand, wire by wire, through and around magnetic cores. Once woven, the code could not be changed. The software would be running nearly a quarter of a million miles from Earth, with human lives depending on its xref:garden::correctness.adoc[correctness] and xref:garden::availability.adoc[availability]. There could be no bugs in the software, since there would be no way to patch it mid-flight. And it had to be recoverable from every error condition.
 
 The famous photograph of Hamilton, taken in 1969, shows her standing beside a stack of printed program listings as tall as she is. The stack is the command module and lunar module flight software that her team produced. (All of the code for Apollo 11 is now https://github.com/chrislgarry/Apollo-11[available to read on GitHub].)
 
@@ -75,7 +75,7 @@ The alarms meant that the computer was being asked to do more work than it had t
 
 Hamilton herself was clear about what was at stake. Writing in 1971, she said that if the computer had not recognized the problem and taken recovery action, "`I doubt if Apollo 11 would have been the successful Moon landing it was.`"
 
-Hamilton came to see this as a cornerstone of software design: assume that users will make mistakes and that systems will be pushed past their limits, and design the software to recover in all those scenarios. Today we would call it xref:garden::graceful-degradation.adoc[graceful degradation] and xref:garden::recoverability.adoc[recoverability] – terms that turn up in conference talks about microservices half a century after the Apollo program first developed these concepts.
+Hamilton came to see this as a cornerstone of software design: assume that users will make mistakes, and that systems will be pushed past their limits, and design the software to recover in all those scenarios.
 
 == The beginning of software engineering
 
@@ -138,8 +138,6 @@ image::photos/margaret-hamilton-1995.jpg["Photo by Daphne Weld Nichols, 1995, CC
 * NASA Science. {link-nasa-moon-facts}[_Moon Facts_].
 
 * Naur and Randell (editors) (1969). {link-nato-1968}[_Software Engineering: Report on a Conference Sponsored by the NATO Science Committee, Garmisch, Germany, 7th to 11th October 1968_]. NATO Scientific Affairs Division.
-
-* Snyder, L. (2018). _Fluency with Information Technology: Skills, Concepts, and Capabilities_. Pearson.
 
 * The White House (2016). {link-white-house-2016-names}[_President Obama Names Recipients of the Presidential Medal of Freedom_].
 
