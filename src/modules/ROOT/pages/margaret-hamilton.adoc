@@ -42,9 +42,7 @@ ____
 
 Hamilton started out writing software for the uncrewed missions, and went on to become director of the lab's software division, responsible for the flight software of both the Apollo command module and the lunar module.
 
-The {link-wikipedia-agc}[Apollo Guidance Computer] was essential to get people to the moon. It was necessary to automate the complex mathematics essential to navigate the spacecraft. Without this automation, piloting the spacecraft would have been impossible.
-
-The Apollo guidance system was one of the earliest digital computers, and one of the first xref:garden::safety-critical-system.adoc[safety-critical systems]. It was required to work perfectly.
+The {link-wikipedia-agc}[Apollo Guidance Computer] was essential to getting people to the moon. It automated the complex mathematics necessary to navigate the spacecraft, without which piloting would have been impossible. It was one of the earliest digital computers, and one of the first xref:garden::safety-critical-system.adoc[safety-critical systems]. It had to work perfectly.
 
 It is hard to overstate how little margin for error there was in the system. It had about 72KB of read-only memory and 4KB of RAM. Its programs were stored in core rope memory – literally woven by hand, wire by wire, through and around magnetic cores. Once woven, the code could not be changed. The software would be running in a  nearly a quarter of a million miles from Earth, with human lives depending on its xref:garden::correctness.adoc[correctness] and xref:garden::availability.adoc[availability]. There could be no bugs in the software, since there would be no way to patch it mid-flight. And it had to be recoverable from every error condition.
 
