@@ -126,13 +126,3 @@ Our tools have changed beyond recognition since the 1960s, but the core principl
 .Margaret Hamilton, 1936-2026
 [#img-margaret-hamilton-1995,link=https://commons.wikimedia.org/wiki/File:Margaret_Hamilton_1995.jpg]
 image::photos/margaret-hamilton-1995.jpg["Photo by Daphne Weld Nichols, 1995, CC BY-SA 3.0"]
-
-== References
-
-* The Guardian (2026). {link-guardian-2026}[_Margaret Hamilton, trailblazer whose software powered Apollo 11 moon landing, dies aged 90_].
-
-* BBC Last Word (2026). {link-bbc-last-word-2026}[_Margaret Hamilton: the woman who helped put man on the moon_]
-
-* The Guardian (2019). {link-guardian-2019}[_Margaret Hamilton: "They worried that the men might rebel. They didn't"_].
-
-* Wikipedia. {link-wikipedia}[_Margaret Hamilton (Software Engineer)_].
