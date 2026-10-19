@@ -29,40 +29,36 @@ During that work she sought to raise the profile of computer programming, then a
 
 == To the Moon
 
-Margaret Heafield was born in Indiana in 1936, to parents who were both academics. She excelled at school and went on to study mathematics, with a minor in philosophy, at Earlham College. In 1958 she married James Cox Hamilton, whom she had met at college, and for a short time she taught high-school math and French in Boston, Indiana. She intended to go on to graduate school to study abstract mathematics, but when the couple moved to Massachusetts so that James could attend Harvard Law School, she took a job at MIT in 1959 to support them both.
+Margaret Heafield was born in Indiana in 1936, to parents who were both academics. She excelled at school and went on to study mathematics, with a minor in philosophy, at Earlham College. In 1958 she married James Cox Hamilton, whom she had met at college, and for a short time she taught high-school math and French in Boston, Indiana. She had intended to go on to graduate school to study abstract mathematics, but in 1959 the couple moved to Massachusetts so James could attend Harvard Law School, and Margaret took a job at MIT to support them both.
 
-She learned to program on the job, first by writing weather-prediction software for MIT. From there she moved to MIT's Lincoln Laboratory, writing software for the SAGE air defense system. She also wrote software for a satellite-tracking project at the Air Force Cambridge Research Laboratories.
+She learned to program on the job, first by writing weather-prediction software, and then contributing to the SAGE air defense system. She also wrote software for a satellite-tracking project at the Air Force Cambridge Research Laboratories.
 
-In 1965 she responded to a job ad from the MIT Instrumentation Laboratory, which was recruiting people to help send a man to the Moon. MIT had been contracted by NASA to develop the guidance and navigation systems for Apollo. The contract did not even mention the word "`software`". Software had yet to become decoupled from the manufacture of computer hardware and become its own discrete discipline.
+In 1965 she responded to a job ad from the MIT Instrumentation Laboratory, which was recruiting people to help send people to the Moon. MIT had been contracted by NASA to develop the guidance and navigation systems for Apollo. The contract did not even mention the word "`software`", a term that was not yet in widespread use, since software remained tightly coupled to the manufacture of computer hardware and had yet to emerge as a distinct industry in its own right.
 
 [quote, Margaret Hamilton, 13 Minutes to the Moon (BBC)]
 ____
-Nobody knew what software was... Not even for people who were some of the people doing software, there's no way to describe it to people like family members.
+Nobody knew what software was. Not even ... some of the people doing software, there [was] no way to describe it to people like family members.
 ____
-
-One reason we could go to the Moon in the 1960s was the guidance computer, which automated the complex mathematics required to navigate the spacecraft, and helped the astronauts to pilot and control it.
 
 Hamilton started out writing software for the uncrewed missions, and went on to become director of the lab's software division, responsible for the flight software of both the Apollo command module and the lunar module.
 
-Hamilton led her team to take a much more rigorous approach to programming the guidance computer. They were meticulous, testing and retesting every possible situation that might occur during the space flights.
+The {link-wikipedia-agc}[Apollo Guidance Computer] was essential to get people to the moon. It was necessary to automate the complex mathematics essential to navigate the spacecraft. Without this automation, piloting the spacecraft would have been impossible.
 
-It is hard to overstate how little margin for error there was in the {link-wikipedia-agc}[Apollo Guidance Computer]. It had about 72KB of read-only memory and 4KB of RAM. Its programs were stored in core rope memory – literally woven by hand, wire by wire, through and around magnetic cores. Once woven, the code could not be changed. This was an early digital computer, yet it had to work perfectly.
+The Apollo guidance system was one of the earliest digital computers, and one of the first xref:garden::safety-critical-system.adoc[safety-critical systems]. It was required to work perfectly.
 
-The software would be running in a xref:garden::safety-critical-system.adoc[safety-critical] xref:garden::embedded-system.adoc[embedded system], nearly a quarter of a million miles from Earth, with human lives depending on its xref:garden::correctness.adoc[correctness] and xref:garden::availability.adoc[availability]. There could be no bugs in the software, since there would be no way to patch it mid-flight. And it had to be recoverable from every error condition.
+It is hard to overstate how little margin for error there was in the system. It had about 72KB of read-only memory and 4KB of RAM. Its programs were stored in core rope memory – literally woven by hand, wire by wire, through and around magnetic cores. Once woven, the code could not be changed. The software would be running in a  nearly a quarter of a million miles from Earth, with human lives depending on its xref:garden::correctness.adoc[correctness] and xref:garden::availability.adoc[availability]. There could be no bugs in the software, since there would be no way to patch it mid-flight. And it had to be recoverable from every error condition.
 
-The famous photograph of Hamilton, taken in 1969, shows her standing beside a stack of printed program listings as tall as she is. The stack is the command module and lunar module flight software that her team produced. All of the code for Apollo 11 is now https://github.com/chrislgarry/Apollo-11[available to read on GitHub].
+The famous photograph of Hamilton, taken in 1969, shows her standing beside a stack of printed program listings as tall as she is. The stack is the command module and lunar module flight software that her team produced. (All of the code for Apollo 11 is now https://github.com/chrislgarry/Apollo-11[available to read on GitHub].)
 
 .Margaret Hamilton beside the Apollo Guidance Computer source listings, 1969
 [#img-margaret-hamilton,link=https://commons.wikimedia.org/wiki/File:Margaret_Hamilton.gif]
 image::photos/margaret-hamilton.jpg["Photo by Draper Laboratory, 1969, public domain (US)"]
 
-In this environment, Hamilton's team developed many principles of software design and construction that we now take for granted. Building on an asynchronous, priority-driven execution model designed by {link-wikipedia-laning}[Hal Laning], they wrote software that could xref:garden::fault-tolerance.adoc[detect faults and recover from them], with priority displays that interrupted the astronauts with critical alarms – what the White House would later describe, in the announcement for Hamilton's 2016 Presidential Medal of Freedom, as "`human-in-the-loop decision capability`".
+In these constraints, Hamilton's team took a rigorous approach to programming the guidance computer. They were meticulous, testing and retesting every possible situation that might occur during the space flights. In this work, they founded many principles of software design and construction that we now take for granted. Building on an asynchronous, priority-driven execution model designed by {link-wikipedia-laning}[Hal Laning], they wrote software that could xref:garden::fault-tolerance.adoc[detect faults and recover from them].
 
 == "`They would never make such an error`"
 
-Despite her engineering rigor, it was Hamilton's four-year-old daughter who exposed a potentially deadly fault in her programming.
-
-As Hamilton told the BBC's {link-bbc-13-minutes-2019}[_13 Minutes to the Moon_] podcast in 2019, she sometimes brought her daughter, Lauren, into the lab on evenings and weekends.
+Despite her engineering rigor, it was Hamilton's four-year-old daughter who exposed a potentially deadly fault in her programming. As Hamilton told the BBC's {link-bbc-13-minutes-2019}[_13 Minutes to the Moon_] podcast in 2019, she sometimes brought her daughter, Lauren, into the lab on evenings and weekends.
 
 [quote, Margaret Hamilton, 13 Minutes to the Moon (BBC)]
 ____
@@ -71,38 +67,30 @@ She would see me pretending that I was the astronaut, and running a mission, I w
 And I thought, "Oh my goodness, I can't ignore this, because this could happen in a real mission."
 ____
 
-Lauren, playing with the command module simulator, had selected P01, the pre-launch program, while the simulated spacecraft was in mid-flight. The simulated mission's navigation data was wiped.
+Lauren, playing with the command module simulator, had selected P01, the pre-launch program, while the simulated spacecraft was in mid-flight. The simulated mission's navigation data was wiped. Hamilton realized that an astronaut could make the same mistake, and she proposed adding code to protect against it. But she was overruled. The astronauts were highly trained, she was told. "`They would never make such an error.`"
 
-Hamilton realized that an astronaut could make the same mistake, and she proposed adding code to protect against it. She was overruled. The astronauts were highly trained, she was told. They would never make such an error.
+Then, during the Apollo 8 mission in December 1968, astronaut Jim Lovell – no less – made exactly that mistake. He inadvertently selected P01 mid-flight, and the spacecraft's navigation data was wiped. Hamilton's team spent hours working out a procedure to upload new data from the ground to get the mission back on track.
 
-Then, during the Apollo 8 mission in December 1968, astronaut Jim Lovell – no less – made exactly that mistake. He inadvertently selected P01 mid-flight, and the spacecraft's navigation data was wiped. Hamilton's team spent hours working out a procedure to upload new data from the ground to get the mission back on track. The software was subsequently changed to guard against this.
+The software was changed to add safeguards against similar human error for future missions. The improved design was dramatically put to the test on 20 July 1969. About seven minutes before the lunar module _Eagle_ touched down on the Moon, the guidance computer started throwing alarms – first a 1202, then a 1201. Neil Armstrong and Buzz Aldrin did not know what they meant. In Mission Control, with seconds to make a decision, guidance officer Steve Bales turned to computer engineer Jack Garman, who confirmed that the alarms did not warrant an abort. Bales gave the go, and capsule communicator Charlie Duke relayed it to the crew: "`We're go on that alarm.`"
 
-This story contains a lesson that our industry is still learning. You cannot assume that the users of a system – however expert, however well-trained – will never make mistakes. Good system design anticipates human error and xref:garden::user-error-protection.adoc[protects against it]. Hamilton came to see this as a general principle of software design. Software must be designed to handle the unexpected, including the cases that everyone assures you will never happen.
+The alarms meant that the computer was being asked to do more work than it had time for. An unexpected stream of data from the rendezvous radar was stealing processing cycles. A naively designed system, one not designed to recover from its own failure modes, might have frozen or crashed. But Hamilton's team had designed the software to cope with exactly this kind of situation. The program was configured to prioritize the most important tasks. When it became overloaded, it shed the lower-priority tasks and restarted, preserving and continuing the critical tasks involved in landing the spacecraft. Meanwhile, the priority displays interrupted the astronauts to let them know what was going on, so the humans-in-the-loop, on board and in Mission Control, could make an informed decision about whether to proceed.
 
-The principle was tested in the most dramatic way possible on 20 July 1969.
+Hamilton herself was clear about what was at stake. Writing in 1971, she said that if the computer had not recognized the problem and taken recovery action, "`I doubt if Apollo 11 would have been the successful Moon landing it was.`"
 
-About seven minutes before the lunar module _Eagle_ touched down on the Moon, the guidance computer started throwing alarms – first a 1202, then a 1201. Neil Armstrong and Buzz Aldrin did not know what they meant. In Mission Control, with seconds to make a decision, guidance officer Steve Bales turned to computer engineer Jack Garman, who confirmed that the alarms did not warrant an abort. Bales gave the go, and capsule communicator Charlie Duke relayed it to the crew: "`We're go on that alarm.`"
-
-The alarms meant that the computer was being asked to do more work than it had time for. An unexpected stream of data from the rendezvous radar was stealing processing cycles.
-
-A naively designed system, one not designed to recover from its own failure modes, might have frozen or crashed. But Hamilton's team had designed the software to cope with exactly this kind of situation. The program was configured to prioritize the most important tasks. When it became overloaded, it shed the lower-priority tasks and restarted, preserving and continuing the critical work of landing the spacecraft. Meanwhile, the priority displays interrupted the astronauts to let them know what was going on, so the humans in the loop, on board and in Mission Control, could make an informed decision about whether to proceed.
-
-This is xref:garden::graceful-degradation.adoc[graceful degradation] and xref:garden::recoverability.adoc[recoverability] in action, half a century before we started using those terms in conference talks about microservices. Hamilton herself was clear about what was at stake. Writing in 1971, she said that if the computer had not recognized the problem and taken recovery action, "`I doubt if Apollo 11 would have been the successful Moon landing it was.`"
+Hamilton came to see this as a cornerstone of software design: assume that users will make mistakes and that systems will be pushed past their limits, and design the software to recover in all those scenarios. Today we would call it xref:garden::graceful-degradation.adoc[graceful degradation] and xref:garden::recoverability.adoc[recoverability] – terms that turn up in conference talks about microservices half a century after the Apollo program first developed these concepts.
 
 == The beginning of software engineering
 
-Hamilton was one of the great pioneers of the digital age, and she is widely credited with founding the field of software engineering.
-
-It was during the Apollo program that Hamilton began calling the work "`software engineering`". In the mid-1960s, programming was not taken seriously as a discipline. Hamilton wanted the work, and the people doing it, to be given the same legitimacy as the hardware engineers they worked alongside. Her colleagues initially found the term amusing.
+Hamilton was one of the great pioneers of the digital age, and she is widely credited with the founding of the field of software engineering. During the Apollo program, Hamilton wanted the work on the software, and the people doing it, to be given the same legitimacy as the hardware engineers they worked alongside. To this end, she started calling the work "`software engineering`".
 
 [quote, Margaret Hamilton]
 ____
 When I first came up with the term, no one had heard of it before, at least in our world.
 ____
 
-The term was subsequently popularized by the xref:garden::nato-software-engineering-conferences.adoc[1968 NATO Software Engineering Conference], which was convened in response to what was then being called the xref:garden::software-crisis.adoc[software crisis].
+Her colleagues initially found the term amusing, but it came to be accepted, first by one of "`the most respected hardware gurus`" on the project. The term was subsequently popularized by the xref:garden::nato-software-engineering-conferences.adoc[1968 NATO Software Engineering Conference], which was convened in response to what was then being called the xref:garden::software-crisis.adoc[software crisis].
 
-The principles that Hamilton's team worked out on Apollo became the foundations of the new discipline. Today, we tend to use "`software engineering`" as a synonym for software development, or even just for programming. But, properly understood, software engineering is a set of design philosophies for building software that is xref:garden::reliability.adoc[reliable] by design. It means anticipating failure and human error, and making sure that a system keeps doing what matters most when the unexpected happens. That is what Hamilton meant by engineering.
+The principles that Hamilton's team worked out on Apollo became the foundations of the new discipline. Today, we tend to use "`software engineering`" as a synonym for software development, or even just for programming. But, properly understood, software engineering is a set of design philosophies for building software that is xref:garden::reliability.adoc[reliable] by design. It means anticipating failure and human error, and making sure that a system keeps doing what matters most when the unexpected happens.
 
 == After Apollo
 
@@ -119,7 +107,9 @@ ____
 
 == Concluding thoughts
 
-Our tools have changed beyond recognition since the 1960s, but the core principles of our discipline have barely shifted. Defensive design, fault tolerance, recovery from failure, and priority scheduling – these are still the baseline. They were laid down by Margaret Hamilton, the first software engineer, and they will endure for all time. If anything, they matter more today, as software systems are increasingly constructed by other xref:garden::artificial-intelligence.adoc[software systems].
+The tools that we use to make software have changed beyond recognition since the 1960s. But the founding principles of software engineering – defensive design, fault tolerance, recovery from failure, priority scheduling, incremental development, and testing for reliability with every change rather than at the end – still hold true.
+
+If anything, these principles matter even more today, at a time when we increasingly delegate the construction of software to xref:garden::artificial-intelligence.adoc[thinking machines] and craft fewer lines of code ourselves. When we can no longer vouch for the code, we must be able to vouch for the engineering. We would do well to remember Margaret Hamilton, the first software engineer, and make sure that her ideas are never forgotten.
 
 .Margaret Hamilton, 1936-2026
 [#img-margaret-hamilton-1995,link=https://commons.wikimedia.org/wiki/File:Margaret_Hamilton_1995.jpg]
