@@ -1,5 +1,5 @@
 = Margaret Hamilton, the first software engineer, 1936-2026
-Kieran Potts, 18 October 2026
+Kieran Potts, 19 October 2026
 :description: Margaret Hamilton, who led the team that wrote the onboard flight software for the Apollo Moon landings, has died aged 90. She gave our profession its name, and many of its founding principles.
 :docinfo: shared
 :nofooter:
@@ -10,15 +10,19 @@ Kieran Potts, 18 October 2026
 :link-mit-news: https://news.mit.edu/2026/margaret-hamilton-computing-pioneer-dies-1007
 :link-wikipedia: https://en.wikipedia.org/wiki/Margaret_Hamilton_(software_engineer)
 
-The Massachusetts Institute of Technology (MIT) has {link-mit-news}[announced] that Margaret Hamilton died on 30 September in Cambridge, Massachusetts, aged 90. She led the team at MIT that wrote the onboard flight software for the Apollo program, including the code that landed the first humans on the Moon. She is also widely credited with coining the term "`software engineering`".
+The Massachusetts Institute of Technology (MIT) has {link-mit-news}[announced] that Margaret Hamilton died on 30 September in Cambridge, Massachusetts, aged 90. She led the team at MIT that wrote the onboard flight software for Nasa's Apollo space program, including the code that landed the first humans on the Moon. During that work she sought to raise the profile of programming, then a nascent discipline, so it would be treated with the same seriousness as the work on the hardware. She started using a new term to describe her work: "`xref:garden::software-engineering.adoc[software engineering]`".
 
-Hamilton is often called the first software engineer. That's not quite literally true, of course – plenty of people were programming computers before her. But she was the first to insist that what they were doing was _engineering_, and to practice it as a discipline that demanded the same rigor as any other engineering field.
+== To the moon
 
-== A new kind of engineering
+Margaret Heafield was born in Indiana in 1936. She studied mathematics, with a minor in philosophy, graduating from Earlham College in 1958. She intended to go on to graduate school in abstract mathematics. Instead, in 1959, she took a job at MIT writing weather-prediction software for the meteorologist Edward Lorenz, on the LGP-30 and PDP-1 computers. From there she moved to MIT's Lincoln Laboratory, writing software for the SAGE air defense system.
 
-Margaret Heafield was born in Paoli, Indiana, in 1936. She studied mathematics, with a minor in philosophy, graduating from Earlham College in 1958. She intended to go on to graduate school in abstract mathematics. Instead, in 1959, she took a job at MIT writing weather-prediction software for the meteorologist Edward Lorenz, on the LGP-30 and PDP-1 computers. From there she moved to MIT's Lincoln Laboratory, writing software for the SAGE air defense system.
+In 1965 she joined the MIT Instrumentation Laboratory, which had been contracted by NASA to develop the guidance and navigation systems for Apollo. She started out writing software for the uncrewed missions, and went on to become director of the lab's software division, responsible for the flight software of both the Apollo command module and the lunar module.
 
-In 1965 she joined the MIT Instrumentation Laboratory, which had been contracted by NASA to develop the guidance and navigation systems for Apollo. She started out writing software for the uncrewed missions, and went on to become director of the lab's Software Engineering Division, responsible for the flight software of both the Apollo command module and the lunar module.
+It is hard to overstate how unforgiving the Apollo software project was. The https://en.wikipedia.org/wiki/Apollo_Guidance_Computer[Apollo Guidance Computer] had about 72KB of read-only memory and 4KB of RAM. Its programs were stored in core rope memory – literally woven by hand, wire by wire, through and around magnetic cores. Once woven, the code could not be changed. There were no over-the-air updates. And the software would be running in a xref:garden::safety-critical-system.adoc[safety-critical] xref:garden::embedded-system.adoc[embedded system], hundreds of thousands of miles from Earth, with human lives depending on its xref:garden::correctness.adoc[correctness] and xref:garden::availability.adoc[availability].
+
+In this environment, Hamilton's team pioneered many ideas that we now take for granted: asynchronous processing, priority scheduling, xref:garden::fault-tolerance.adoc[fault detection and recovery], and what the White House would later describe as "`human-in-the-loop decision capability`". The famous photograph of Hamilton, taken in 1969, shows her standing beside a stack of printed program listings as tall as she is. That stack is the source code for the Apollo Guidance Computer – which, since 2016, has been https://github.com/chrislgarry/Apollo-11[available to read on GitHub].
+
+== Software engineering
 
 It was during this time that Hamilton began calling the work "`software engineering`". In the mid-1960s, programming was not taken seriously as a discipline. Hamilton wanted the work, and the people doing it, to be given the same legitimacy as the hardware engineers they worked alongside. Her colleagues initially found the term amusing.
 
@@ -27,13 +31,10 @@ ____
 When I first came up with the term, no one had heard of it before, at least in our world.
 ____
 
-The term was popularized more widely by the https://en.wikipedia.org/wiki/NATO_Software_Engineering_Conferences[1968 NATO Software Engineering Conference], which was convened in response to what was then being called the "`software crisis`". But Hamilton was already doing software engineering, and calling it that, on one of the most demanding software projects of the era.
+The term was subsequently popularized more widely by the xref:garden::nato-software-engineering-conferences.adoc[1968 NATO Software Engineering Conference], which was convened in response to what was then being called the "`xref:garden::software-crisis.adoc[software crisis]`".
 
-== Software you cannot patch
 
-It is hard to overstate how unforgiving the Apollo software project was. The https://en.wikipedia.org/wiki/Apollo_Guidance_Computer[Apollo Guidance Computer] had about 72KB of read-only memory and 4KB of RAM. Its programs were stored in core rope memory – literally woven by hand, wire by wire, through and around magnetic cores. Once woven, the code could not be changed. There were no over-the-air updates. And the software would be running in a xref:garden::safety-critical-system.adoc[safety-critical] xref:garden::embedded-system.adoc[embedded system], hundreds of thousands of miles from Earth, with human lives depending on its xref:garden::correctness.adoc[correctness].
 
-In this environment, Hamilton's team pioneered many ideas that we now take for granted: asynchronous processing, priority scheduling, xref:garden::fault-tolerance.adoc[fault detection and recovery], and what the White House would later describe as "`human-in-the-loop decision capability`". The famous photograph of Hamilton, taken in 1969, shows her standing beside a stack of printed program listings as tall as she is. That stack is the source code for the Apollo Guidance Computer – which, since 2016, has been https://github.com/chrislgarry/Apollo-11[available to read on GitHub].
 
 .Margaret Hamilton beside the Apollo Guidance Computer source listings, 1969
 [#img-margaret-hamilton,link=https://commons.wikimedia.org/wiki/File:Margaret_Hamilton.gif]
