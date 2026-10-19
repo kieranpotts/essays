@@ -14,13 +14,21 @@ The Massachusetts Institute of Technology (MIT) has {link-mit-news}[announced] t
 
 == To the moon
 
-Margaret Heafield was born in Indiana in 1936. She studied mathematics, with a minor in philosophy, graduating from Earlham College in 1958. She intended to go on to graduate school in abstract mathematics. Instead, in 1959, she took a job at MIT writing weather-prediction software for the meteorologist Edward Lorenz, on the LGP-30 and PDP-1 computers. From there she moved to MIT's Lincoln Laboratory, writing software for the SAGE air defense system.
+Margaret Heafield was born in Indiana in 1936. She studied mathematics, with a minor in philosophy, graduating from Earlham College in 1958. That June she married James Cox Hamilton, whom she had met at college, and for a short time she taught high-school math and french in Boston, Indiana. She intended to go on to graduate school in abstract mathematics. But when the couple moved to Massachusetts so that James could attend Harvard Law School, she took a job at MIT to support them.
+
+In 1959 she started writing weather-prediction software for the meteorologist Edward Lorenz, on the LGP-30 and PDP-1 computers. From there she moved to MIT's Lincoln Laboratory, writing software for the SAGE air defense system. She also wrote software for a satellite-tracking project at the Air Force Cambridge Research Laboratories.
 
 In 1965 she joined the MIT Instrumentation Laboratory, which had been contracted by NASA to develop the guidance and navigation systems for Apollo. She started out writing software for the uncrewed missions, and went on to become director of the lab's software division, responsible for the flight software of both the Apollo command module and the lunar module.
 
-It is hard to overstate how unforgiving the Apollo software project was. The https://en.wikipedia.org/wiki/Apollo_Guidance_Computer[Apollo Guidance Computer] had about 72KB of read-only memory and 4KB of RAM. Its programs were stored in core rope memory – literally woven by hand, wire by wire, through and around magnetic cores. Once woven, the code could not be changed. There were no over-the-air updates. And the software would be running in a xref:garden::safety-critical-system.adoc[safety-critical] xref:garden::embedded-system.adoc[embedded system], hundreds of thousands of miles from Earth, with human lives depending on its xref:garden::correctness.adoc[correctness] and xref:garden::availability.adoc[availability].
+It is hard to overstate how unforgiving the Apollo software project was. The https://en.wikipedia.org/wiki/Apollo_Guidance_Computer[Apollo Guidance Computer] had about 72KB of read-only memory and 4KB of RAM. Its programs were stored in core rope memory – literally woven by hand, wire by wire, through and around magnetic cores. Once woven, the code could not be changed. And the software would be running in a xref:garden::safety-critical-system.adoc[safety-critical] xref:garden::embedded-system.adoc[embedded system], nearly a quarter of a million miles from Earth, with human lives depending on its xref:garden::correctness.adoc[correctness] and xref:garden::availability.adoc[availability]. There would be no way to patch the programs mid-flight.
 
-In this environment, Hamilton's team pioneered many ideas that we now take for granted: asynchronous processing, priority scheduling, xref:garden::fault-tolerance.adoc[fault detection and recovery], and what the White House would later describe as "`human-in-the-loop decision capability`". The famous photograph of Hamilton, taken in 1969, shows her standing beside a stack of printed program listings as tall as she is. That stack is the source code for the Apollo Guidance Computer – which, since 2016, has been https://github.com/chrislgarry/Apollo-11[available to read on GitHub].
+In this environment, Hamilton's team developed many ideas that we now take for granted. Building on an asynchronous, priority-driven executive designed by https://en.wikipedia.org/wiki/J._Halcombe_Laning[Hal Laning], they wrote software that could xref:garden::fault-tolerance.adoc[detect faults and recover from them], and priority displays that interrupted the astronauts with critical alarms – what the White House would later describe, in the announcement for Hamilton's 2016 Presidential Medal of Freedom, as "`human-in-the-loop decision capability`".
+
+The famous photograph of Hamilton, taken in 1969, shows her standing beside a stack of printed program listings as tall as she is. The stack is the command module and lunar module flight software that her team produced. All of the code for Apollo 11 is now https://github.com/chrislgarry/Apollo-11[available to read on GitHub].
+
+.Margaret Hamilton beside the Apollo Guidance Computer source listings, 1969
+[#img-margaret-hamilton,link=https://commons.wikimedia.org/wiki/File:Margaret_Hamilton.gif]
+image::photos/margaret-hamilton.jpg["Photo by Draper Laboratory, 1969, public domain (US)"]
 
 == Software engineering
 
@@ -32,13 +40,6 @@ When I first came up with the term, no one had heard of it before, at least in o
 ____
 
 The term was subsequently popularized more widely by the xref:garden::nato-software-engineering-conferences.adoc[1968 NATO Software Engineering Conference], which was convened in response to what was then being called the "`xref:garden::software-crisis.adoc[software crisis]`".
-
-
-
-
-.Margaret Hamilton beside the Apollo Guidance Computer source listings, 1969
-[#img-margaret-hamilton,link=https://commons.wikimedia.org/wiki/File:Margaret_Hamilton.gif]
-image::photos/margaret-hamilton.jpg["Photo by Draper Laboratory, 1969, public domain (US)"]
 
 == "`That would never happen`"
 
