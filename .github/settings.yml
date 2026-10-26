@@ -18,7 +18,7 @@ repository:
 
   # The name of the repository. ⚠️ Changing this will rename the repository,
   # and thereby change its URL.
-  name: thoughts
+  name: essays
 
   # A short description of the repository that will show up in the GitHub UI.
   description: 'Source files, and build and deployment scripts, for my blog. '

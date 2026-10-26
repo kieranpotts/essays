@@ -2,8 +2,8 @@
 // https://aka.ms/devcontainer.json.
 
 {
-  "name": "Thoughts",
-  "runArgs": ["--name", "kieranpotts-thoughts"],
+  "name": "Essays",
+  "runArgs": ["--name", "kieranpotts-essays"],
   "build": {
     "dockerfile": "Dockerfile",
     "context": "..",

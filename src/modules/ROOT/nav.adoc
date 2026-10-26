@@ -1,4 +1,4 @@
-// This nav file declares the page hierarchy for the "thoughts"
+// This nav file declares the page hierarchy for the "essays"
 // component. Antora uses it to compute each page's ancestry
 // (`page.breadcrumbs`), which drives the breadcrumb trail rendered
 // by `website/default/src/ui/partials/breadcrumbs.hbs`.
@@ -6,7 +6,7 @@
 // Without this file, every page in this component has no ancestors
 // and no breadcrumb trail is shown.
 
-* xref:index.adoc[Thoughts]
+* xref:index.adoc[Essays]
 ** xref:margaret-hamilton.adoc[Margaret Hamilton, the first software engineer, 1936-2026]
 ** xref:reverse-interviews.adoc[Reverse interviews]
 ** xref:mythical-man-month-50.adoc[The Mythical Man-Month at 50]

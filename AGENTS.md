@@ -4,7 +4,7 @@ A blog built as an [Antora](https://antora.org/) documentation-site
 component. Posts are AsciiDoc pages under `src/modules/ROOT/pages/`,
 with RSS, Atom, and JSON feeds generated alongside the site.
 
-The blog is published at https://kieranpotts.com/thoughts/. The
+The blog is published at https://kieranpotts.com/essays/. The
 [website](https://github.com/kieranpotts/website) repository is
 responsible for the build and deployment.
 
