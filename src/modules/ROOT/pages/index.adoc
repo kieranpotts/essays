@@ -4,7 +4,8 @@
 :docinfo: shared
 :nofooter:
 
-Occasional essays on the craft of software engineering — the state of the art, its history, and future.
+Occasional essays on the craft of software engineering — the state of the art, its history, and future. Subscribe to new essays via link:/feeds/rss.xml[RSS],
+link:/feeds/atom.xml[Atom], or link:/feeds/feed.json[JSON Feed].
 
 * xref:margaret-hamilton.adoc[Margaret Hamilton, the first software engineer, 1936-2026] +
   [.small]#19 October 2026#
