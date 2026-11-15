@@ -1,0 +1,205 @@
+= My AI journey (so far)
+Kieran Potts, 16 November 2026
+:description: A snapshot of how I work with AI coding agents in late 2026, and some predictions for how I think software engineering will change in the years ahead.
+:docinfo: shared
+:nofooter:
+
+:link-bockeler:      https://martinfowler.com/articles/harness-engineering.html
+:link-claude-code:   https://claude.com/claude-code
+:link-dora:          https://dora.dev/
+:link-genie:         https://github.com/kieranpotts/genie
+:link-ollama:        https://ollama.com/
+:link-pi:            https://pi.dev/
+:link-pi-extensions: https://github.com/kieranpotts/pi
+:link-skills:        https://github.com/kieranpotts/skills
+:link-tpl-audits:    https://github.com/kieranpotts/audits
+:link-tpl-design:    https://github.com/kieranpotts/design
+:link-tpl-plans:     https://github.com/kieranpotts/plans
+:link-tpl-rfc:       https://github.com/kieranpotts/rfc
+:link-tpl-risks:     https://github.com/kieranpotts/risks
+:link-tpl-specs:     https://github.com/kieranpotts/specs
+:link-willison:      https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/
+
+I have spent much of 2026 rebuilding the way I work around AI coding xref:garden::agent.adoc[agents]. Along the way I have written a collection of agent skills, extended one xref:garden::agent-harness.adoc[agent harness] and built a hardened sandbox around it, built and shelved a workflow engine, restructured every repository in my personal workspace, and written xref:standards::061.adoc[a technical standard] to pin down what I learned.
+
+This post is a snapshot of where all that has got me. It describes how one engineer works in November 2026. It is not a prescription. The tools change monthly, and my opinions about them change nearly as often — hence "`so far`".
+
+But one conclusion has held firm through all the churn. The engineering that surrounds a model matters far more than the model itself.
+
+== Engineering, only more so
+
+Effective use of AI in software development requires doubling down on age-old engineering practice. Clear requirements. Considered design. Small, incremental changes. Automated tests. xref:garden::version-control.adoc[Version control]. Review. None of this has been displaced. All of it now carries more load.
+
+The reason is volume. Agents produce changes faster, and in far greater quantity, than any human team can. Everything that keeps a codebase trustworthy has to scale with that output, or the codebase stops being trustworthy.
+
+So my process has become more structured, not less. I now work through an explicit development lifecycle — analysis, design, planning, construction, testing, review — with each phase run as a discrete step. This is not a return to xref:garden::waterfall-model.adoc[waterfall]. The steps are small and the whole cycle is repeated for every increment. But each step is distinct, with a defined purpose, a defined input, and a defined output.
+
+Fred Brooks would recognize the shape of this. As I wrote in xref:mythical-man-month-50.adoc[my review of _The Mythical Man-Month_], the hard part of software has always been deciding precisely what to build, not typing it in. A model that generates code in seconds makes that old truth more obvious than ever.
+
+== Artifacts at the seams
+
+The most important parts of a structured lifecycle are the seams between its phases.
+
+Every phase consumes an artifact and produces another. Analysis produces a specification. Design consumes that specification and produces design docs and decision records. Planning consumes both and produces a delivery plan, broken down into small increments. Construction consumes one increment at a time.
+
+Human teams get away with fuzzy seams, because people fill in the gaps by talking to each other. Agents cannot. An agent starts every session knowing nothing about the project. Whatever is not written in the artifact it is handed does not exist, as far as that agent is concerned.
+
+So the inputs and outputs at each seam must be well defined. I have built a set of template repositories for exactly this purpose:
+
+* *{link-tpl-specs}[Specs]*: what the system does, in business terms.
+
+* *{link-tpl-rfc}[RFCs]*: how significant technical decisions were made, and why.
+
+* *{link-tpl-design}[Design docs]*: what the system looks like in production.
+
+* *{link-tpl-plans}[Plans]*: when, and in what order, the work gets done.
+
+* *{link-tpl-audits}[Audits]*: point-in-time evaluations of the as-built architecture.
+
+* *{link-tpl-risks}[Risks]*: the security and privacy risks the system carries.
+
+Each one is a version-controlled store with a defined lifecycle. A proposal to change the requirements, for example, moves from draft, to proposed, to accepted, to released. Each store ships with small skills that drive those state transitions.
+
+Sitting above the stores is my {link-skills}[collection of agent skills], which covers the phases of the lifecycle itself: specify, design, plan, code, test, review, and so on. The skills are deliberately independent. No skill hands off to another. The stores are the persistence layer between them. An agent working on an upstream step writes an artifact to a store, and an agent working on a downstream step — a different session, perhaps a different model — reads it as xref:garden::context.adoc[context] for its own task.
+
+Because the stores all live in Git, requirements, decisions, designs, plans, and code are branched, committed, reviewed, and merged in exactly the same way. Auditability and rollback come for free.
+
+== Documentation is the context
+
+xref:garden::documentation.adoc[Documentation] is the key to all of this.
+
+If everything is written down in a durable artifact, in a structured and consistent way, including the architectural designs and the decisions behind them, then it all becomes high-quality context for agents. xref:garden::context-engineering.adoc[Context engineering] turns out to be mostly a documentation problem.
+
+In 2024 I made xref:rfcs.adoc[the case for RFCs and decision logs]. The argument then was about people: a decision log records _why_ a system is made the way it is, so that knowledge survives after the original decision makers have moved on. That argument now applies with even greater force. An agent is the ultimate new starter. It joins the project with no history, every single session, and it reads everything you give it.
+
+Nearly every repository of mine now has an `AGENTS.md` file at its root. It describes the project's structure, tools, and rules, and it points to the technical standards that govern the work, each with a note on when to consult it. Agents fetch the detail on demand, when the task calls for it.
+
+There is a deeper shift here, too. I now treat the specification — not the code — as the xref:garden::single-source-of-truth.adoc[source of truth]. When the behavior of a system needs to change, the change starts in the spec. The code is derived from it. This is the idea behind xref:garden::spec-driven-development.adoc[spec-driven development]. I subscribe to it, with one caveat that I will come to.
+
+== Try not to write anything
+
+A key principle follows from all of this: try not to write anything.
+
+The only things I should be writing by hand now are the artifacts that control agents. Birgitta Böckeler {link-bockeler}[sorts these into two categories]. _Guides_ steer an agent before it acts: the `AGENTS.md` files, skills, technical standards, and permission rules. _Sensors_ check an agent's output after it acts: tests, linters, type checkers, validation scripts, and review.
+
+When an agent gets something wrong, the temptation is to fix the output myself. It is nearly always the wrong move. A hand-made fix corrects one mistake, once. The better response is to ask what was missing. Was it a gap in a guide, so the agent did not know the rule? Or a missing sensor, so nothing caught the mistake? Close that gap and the same mistake is prevented in every future session.
+
+My repositories are slowly accumulating these controls. The skills collection has a validator script that every skill must pass. This blog has a CI check that fails if a post's date cannot be parsed. Each one captures a failure that happened once, and should not happen again.
+
+I do still make small changes by hand following review. But I try to treat each such edit as a signal that a guide or a sensor needs work.
+
+== Never trust an agent
+
+My general principle is not to trust agents. They must never be fully autonomous. They should operate only in tightly controlled environments, inside xref:garden::guardrail.adoc[guardrails] that are enforced by the environment and not merely requested in a prompt.
+
+This is not cynicism about the technology. A model's output is non-deterministic. An instruction in a prompt is a request, which the model may misread, forget, or reason its way around. A permission rule enforced by the harness is a fact.
+
+On security, the key idea for me is Simon Willison's {link-willison}[lethal trifecta]. An agent becomes dangerous when it has three things at once: access to private data, exposure to untrusted content, and the ability to communicate externally. With all three, a xref:garden::prompt-injection.adoc[prompt injection] hidden in a web page can instruct the agent to read your secrets and send them to an attacker. With any one of the three removed, that attack does not work.
+
+You cannot make prompt injection impossible. You can only xref:garden::lethal-trifecta.adoc[break the trifecta]. My preference is to remove web access from any agent that runs in the background. When I am at the keyboard, I am the control. When I am not, the agent gets no route to the outside world.
+
+== My current setup
+
+I work in two modes, with a different tool for each.
+
+For at-keyboard work I use {link-claude-code}[Claude Code], in VS Code, in Zed, or straight in the terminal. This is synchronous work. I give an instruction, watch what the agent does, and steer as it goes.
+
+For work that runs in the background I use {link-pi}[Pi], in a terminal multiplexer (I've been switching between tmux, Zellij, and Herdr), with xref:garden::open-weight-model.adoc[open-weight models] served from my own hardware by {link-ollama}[Ollama]. "`Background`" does not mean unattended. These are tasks that I leave running in another pane, and that I nevertheless keep an eye on.
+
+Pi is a minimal coding agent. It is closer to a framework for building your own harness than a finished product, and out of the box it has no security controls at all. So I have written {link-pi-extensions}[my own extensions] for it. One asks for confirmation, defaulting to deny, before any tool call that changes something. Another replaces Pi's built-in `bash` tool with one that never invokes a shell. A third swaps the system prompt for a named role — product manager, software architect, code reviewer — each of which can declare the model and the tools it is allowed.
+
+For work that is truly xref:garden::away-from-keyboard.adoc[away-from-keyboard] I have been building {link-genie}[Genie], which wraps Pi in a hardened container. Inside it the agent has no shell, no Git, and no network tools. It reaches the project's files only through a gated server that logs every call, and it reaches models only through a proxy on the host, which holds the API keys so the agent never sees them. That is a lot of capability traded away for accountability. The trade only pays when nobody is watching, and Genie is still a work in progress.
+
+== Owning every commit
+
+The other half of my setup is the environment the agents run in.
+
+All of my repositories are now checked out as Git worktrees: a bare clone, with one working tree per branch alongside it. A piece of work can be given a checkout of its own without disturbing any other.
+
+I always work in a devcontainer. There is one container for my whole personal workspace, with every repository mounted into it. Agents run inside that container as a non-root user. There is no Docker in there, because access to the host's Docker daemon amounts to root on the host.
+
+And inside the container, agents are locked out of Git. They cannot stage, commit, or push. The end state of any agent's task is a dirty working tree, and nothing more.
+
+I do the committing myself, from the host. I review the changes in the working tree, as a diff, and then I decide what goes into the history and under what message.
+
+This is the control that matters most to me. Everything committed in my name, I own. xref:garden::accountability.adoc[Accountability] cannot be delegated to a tool, so the act that confers it stays with me.
+
+== Reviewing everything, for now
+
+I said I had one caveat about treating specs as the source of truth. Here it is.
+
+In theory, if the acceptance criteria in a specification are executable, then passing tests tell you the software is correct, and nobody needs to read the code. I am not there yet. I still want to review all output. I am not quite at the level where I am happy to rely on executable specifications alone.
+
+That will change by degrees. As my trust in these tools and ways of working grows, backed by a track record, I expect to spend less time on review.
+
+But I think I will always do some. A test suite demonstrates behavior. It says very little about structure. Whether a change introduces threads, for example, and whether it uses them safely, is an architectural concern that tests are bad at exposing and that is expensive to get wrong. Decisions of that kind I expect to keep reading for myself.
+
+== The least capable model
+
+It is tempting to turn to the most powerful model for every task. I aim for the opposite: to run the _least_ capable model that can do the job, which is to say the cheapest.
+
+This is only possible because of everything described above. Work is still broken down into small, incremental chunks. A small, well-specified task, supplied with good context, is within reach of a modest model running on my own machine. A large, vague one will defeat even a frontier model.
+
+So model choice is made per step, not per project. Each of my skills notes the class of model I recommend for it. And in Genie, requests are routed by role — programmer, technical lead, technical writer, security analyst — with each role mapped to a different local model.
+
+There is a human in the loop between each step. I am removing those checkpoints, slowly, one at a time, and only where the outcomes have been consistently good.
+
+== Stability, not only throughput
+
+Most of the conversation about AI in software is about speed. But the {link-dora}[DORA research] has long measured delivery performance on two axes: xref:garden::throughput.adoc[throughput] and stability. Faster is only better if you are not also breaking things more often.
+
+LLMs are useful on the second axis, too. They can be used to dial up quality controls. A security review, an architecture audit, a threat-modeling session, a consistency check of the documentation against the code: these were once expensive enough to be occasional. Now they are cheap enough to be routine.
+
+Several of my skills exist for this purpose and produce no feature code at all.
+
+== Loops and runners
+
+Not every experiment has stuck.
+
+The logical next step from all this is xref:garden::loop-engineering.adoc[loop engineering]: a platform that runs a whole workflow by itself, chaining agent steps together with deterministic ones. On such a platform the committing would be done deterministically, by a scripted step, and not left to an agent's discretion.
+
+I built an experimental one of my own. It ran workflows defined in YAML: ordered pipelines of script steps and agent steps, with typed outputs passed between them, limits on turns and time, and a state file so that a failed run could be resumed. I have abandoned it for now, because I do not currently have a use case that justifies it. That may change.
+
+I have also had success using a self-hosted GitHub Actions runner to trigger agentic tasks on my own workstation. A workflow is dispatched from the command line with a prompt, the agent runs locally in a container, and the output comes back as a workflow artifact. I am not using this at the moment, either, but I will return to it for a commercial project I am working on.
+
+== What comes next
+
+Handing work over to agents is an incremental and experimental process. I give them a little more to do, watch the outcomes, and adjust. If a workflow stops producing good results, the human checkpoints go back in.
+
+New models arrive constantly, and I experiment with them continuously. Public benchmarks are a useful first filter, but they say little about how a model performs on my own work. So I will soon add xref:garden::ai-eval.adoc[evals]: a suite of tests that lets me judge the capabilities of a new model myself, against my own collection of skills. Then the question of which is the cheapest model that can reliably run a given skill becomes one I can answer with evidence.
+
+== Conclusion
+
+The pattern across all of this is that AI has pushed me back toward fundamentals. Clear requirements, written-down decisions, small increments, tests, review, and a human who is accountable for every commit. The agents do more and more of the typing. The engineering is still mine to do.
+
+That is where I am, so far. I expect to be somewhere else in a year.
+
+// TODO: Product engineering - always worked at a higher level of abstraction
+// anyway. Now it is simply easier to stay at that level, and no need to
+// context switch into low-level syntax concerns, etc.
+
+// I also need to maintain less knowledge in my head. I don't need to remember
+// all of Java and Spring's APIs, or every AWS service. I just need to know
+// the fundamentals.
+
+// Proliferation of tooling. Trade-off is investing a lot of time in trialing
+// new tools, and customizing them. Things will settle down in a few years.
+// Just as VS Code as become the de fact code editor, so too will an agent
+// harness emerge as the clear industry favorite.
+
+// ----
+
+// Computer science and software engineering fundamentals will become far more valuable than knowing the latest frameworks.
+
+// If AI can write code in almost any language, knowing the nuance of another framework becomes less of a competitive advantage.
+
+// But understanding algorithms, data structures, networking, operating systems, databases, architecture and security?
+
+// That's a different story.
+
+// You still need to know:
+
+// Why a particular architecture is appropriate.
+// Why an API might fail.
+// Why a database won't scale.
+// Why an apparently working solution might be insecure.
