@@ -98,6 +98,8 @@ The only things I should be writing by hand now are the artifacts that control a
 
 When an agent gets something wrong, the temptation is to fix the output myself. It is nearly always the wrong move. A hand-made fix corrects one mistake, once. The better response is to ask what was missing. Was it a gap in a guide, so the agent did not know the rule? Or a missing sensor, so nothing caught the mistake? Close that gap and the same mistake is prevented in every future session.
 
+Underneath, this is a question about feedback: how does an agent learn about the quality of its own work? The objective is for agents to produce code the way _I_ want it produced, consistent with my policies and rules.
+
 My repositories are slowly accumulating these controls. The skills collection has a validator script that every skill must pass. This blog has a CI check that fails if a post's date cannot be parsed. Each one captures a failure that happened once, and should not happen again.
 
 I do still make small changes by hand following review. But I try to treat each such edit as a signal that a guide or a sensor needs work.
@@ -108,19 +110,47 @@ My general principle is not to trust agents. They must never be fully autonomous
 
 This is not cynicism about the technology. A model's output is non-deterministic. An instruction in a prompt is a request, which the model may misread, forget, or reason its way around. A permission rule enforced by the harness is a fact.
 
+No matter how capable models become, they cannot be trusted in the way we trust a traditional program. Their guardrails are learned from training data, not enforced by hard-coded logical conditions, so they hold _most_ of the time, not _all_ of the time. For a great many uses, "`most of the time`" is not good enough.
+
+That includes the guides I lean on so heavily. Skills, rules, and instructions are really just prayers, not deterministic quality gates. They save me typing, but an agent can ignore them, as it may when its context window gets bloated. Reviewer agents that double-check the work of other agents improve outcomes, but they do not solve the problem either. I am still relying on agents to produce good output, and I have added a layer of orchestration complexity without getting stable results.
+
 On security, the key idea for me is Simon Willison's {link-willison}[lethal trifecta]. An agent becomes dangerous when it has three things at once: access to private data, exposure to untrusted content, and the ability to communicate externally. With all three, a xref:garden::prompt-injection.adoc[prompt injection] hidden in a web page can instruct the agent to read your secrets and send them to an attacker. With any one of the three removed, that attack does not work.
 
 You cannot make prompt injection impossible. You can only xref:garden::lethal-trifecta.adoc[break the trifecta]. My preference is to remove web access from any agent that runs in the background. When I am at the keyboard, I am the control. When I am not, the agent gets no route to the outside world.
+
+== Deterministic wrappers
+
+An agent harness, the software that gives a model access to tools, files, and networks, cannot rely on the model to police itself. It needs ordinary programs, built from logic, wrapped around it to constrain what the model is actually permitted to do. The reliable part of the system is the part that _isn't_ the model.
+
+So every model request from my workspace passes through a central point of control, which applies security and governance deterministically:
+
+* Traffic is locked to an allowlist of approved models and providers.
+
+* Each key has a spend limit, so a runaway loop cannot run up an unbounded bill.
+
+* Zero data retention is enforced with the providers I use.
+
+* Prompt injection is blocked, by screening against more than 30 attack patterns derived from OWASP.
+
+* Personally identifiable information is redacted before it ever reaches a provider.
+
+None of these is an AI capability. Every one is a deterministic control wrapped around a non-deterministic core. And because these checks run in separate services, completely isolated from the agentic workflows, they also free the agents to get more work done.
+
+That, to me, is the real shape of building responsibly with AI: not trusting the model more, but architecting so that I need to trust it less.
 
 == My current setup
 
 I work in two modes, with a different tool for each.
 
-For at-keyboard work I use {link-claude-code}[Claude Code], in VS Code, in Zed, or straight in the terminal. This is synchronous work. I give an instruction, watch what the agent does, and steer as it goes.
+For at-keyboard work I use {link-claude-code}[Claude Code], in VS Code, in Zed, or straight in the terminal. This is synchronous work. I give an instruction, watch what the agent does, and steer as it goes. Claude Code does a lot behind the scenes that manipulates the context, which makes it a poor foundation for stable, repeatable workflows. That is one reason I do not use it for background work.
 
 For work that runs in the background I use {link-pi}[Pi], in a terminal multiplexer (I've been switching between tmux, Zellij, and Herdr), with xref:garden::open-weight-model.adoc[open-weight models] served from my own hardware by {link-ollama}[Ollama]. "`Background`" does not mean unattended. These are tasks that I leave running in another pane, and that I nevertheless keep an eye on.
 
-Pi is a minimal coding agent. It is closer to a framework for building your own harness than a finished product, and out of the box it has no security controls at all. So I have written {link-pi-extensions}[my own extensions] for it. One asks for confirmation, defaulting to deny, before any tool call that changes something. Another replaces Pi's built-in `bash` tool with one that never invokes a shell. A third swaps the system prompt for a named role — product manager, software architect, code reviewer — each of which can declare the model and the tools it is allowed.
+We are still figuring out what a good agent harness looks like. At one end are minimal frameworks like Pi. At the other are harnesses that orchestrate swarms of highly autonomous agents. I looked at Codex CLI, AMP, Factory Droid, and OpenCode too. OpenCode, which is fully open source, is an excellent choice if you want something that just works out of the box. But Pi and OpenCode are the main open-source options right now, and I settled on Pi.
+
+Pi is a minimal coding agent. It is closer to a framework for building your own harness than a finished product. Its motto is to adapt the coding agent to your needs, not the other way around, and it is built on the principle that we should be able to modify our own agentic workflows. Right now I want to experiment with ideas quickly, so a minimal, extensible core suits me. Its system prompt is under 1,000 tokens, against about 10,000 for Claude Code, and can be extended or replaced entirely. Tools, commands, events, and interface components can all be extended, and bundled into packages that hot-reload. By design there is no MCP, no subagents, no plan mode, no background bash, and no built-in to-do list. You use tmux to run several agents, and a `TODO.md` file for the rest.
+
+Out of the box Pi also has no security controls at all. This is deliberate. Most agents ask the user to approve each action, but that is a false economy, because people turn the prompts off or keep blindly pressing "`accept`". Pi's philosophy is that containerization should be the basis for protecting your systems from a malicious or compromised agent, with a permissions gate added to suit your own risk appetite. So I have written {link-pi-extensions}[my own extensions] for it. One asks for confirmation, defaulting to deny, before any tool call that changes something. Another replaces Pi's built-in `bash` tool with one that never invokes a shell. A third swaps the system prompt for a named role — product manager, software architect, code reviewer — each of which can declare the model and the tools it is allowed.
 
 For work that is truly xref:garden::away-from-keyboard.adoc[away-from-keyboard] I have been building {link-genie}[Genie], which wraps Pi in a hardened container. Inside it the agent has no shell, no Git, and no network tools. It reaches the project's files only through a gated server that logs every call, and it reaches models only through a proxy on the host, which holds the API keys so the agent never sees them. That is a lot of capability traded away for accountability. The trade only pays when nobody is watching, and Genie is still a work in progress.
 
@@ -128,7 +158,7 @@ For work that is truly xref:garden::away-from-keyboard.adoc[away-from-keyboard] 
 
 Working with agents has turned out to be closer to managing people than I expected. I now have a small team of junior developers, testers, reviewers, and technical proofreaders. Some are little more than rubber ducks. Some I delegate work to, always with oversight. Each has its own personality, and all of them are equally over-confident in their abilities.
 
-I keep them small and specialized, in line with the single responsibility principle. Each has clear boundaries, a persona such as software tester, and a role it is expected to fulfil. Narrowing an agent's scope limits the freedom it has to wander, which also reduces the probability of hallucination.
+I keep them small and specialized, in line with the single responsibility principle. Each has clear boundaries, a persona such as software tester, and a role it is expected to fulfil. Narrowing an agent's scope limits the freedom it has to wander, which also reduces the probability of hallucination. This models the structure and workflows of a human team, and each agent can be more focused on one part of the lifecycle. But a team of agents is still a team of agents. It improves outcomes without becoming a quality gate, which is why it sits alongside the deterministic controls described above and does not replace them.
 
 == Owning every commit
 
@@ -201,6 +231,14 @@ New models arrive constantly, and I experiment with them continuously. Public be
 The pattern across all of this is that AI has pushed me back toward fundamentals. Clear requirements, written-down decisions, small increments, tests, review, and a human who is accountable for every commit. The agents do more and more of the typing. The engineering is still mine to do.
 
 That is where I am, so far. I expect to be somewhere else in a year.
+
+// TODO: Distinguish between "automation" and "agentic", and use the two terms
+// consistently throughout the post. Automation: deterministic, scripted logic
+// that behaves the same way every time (eg. the allowlist, spend limits, PII
+// redaction, a scripted commit step). Agentic: work delegated to a model, which
+// is non-deterministic. Check each use of "automation", "deterministic",
+// "agent", and "agentic" in the post, especially in the "Deterministic
+// wrappers" and "Loops and runners" sections.
 
 // TODO: Product engineering - always worked at a higher level of abstraction
 // anyway. Now it is simply easier to stay at that level, and no need to
