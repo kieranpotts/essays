@@ -64,7 +64,7 @@ So the inputs and outputs at each seam must be well defined. I have built a set 
 
 Each one is a version-controlled store with a defined lifecycle. A proposal to change the requirements, for example, moves from draft, to proposed, to accepted, to released. Each store ships with small skills that drive those state transitions.
 
-Sitting above the stores is my {link-skills}[collection of agent skills], which covers the phases of the lifecycle itself: specify, design, plan, code, test, review, and so on. The skills are deliberately independent. No skill hands off to another. The stores are the persistence layer between them. An agent working on an upstream step writes an artifact to a store, and an agent working on a downstream step — a different session, perhaps a different model — reads it as xref:garden::context.adoc[context] for its own task.
+Sitting above the stores is my {link-skills}[collection of agent skills], which covers the phases of the lifecycle itself: specify, design, plan, code, test, review, and so on. The skills are harness-agnostic: they describe how I want the work done, not which product is doing it, so the same workflow carries from one agent to another without being rewritten. They are also deliberately independent. No skill hands off to another. The stores are the persistence layer between them. An agent working on an upstream step writes an artifact to a store, and an agent working on a downstream step — a different session, perhaps a different model — reads it as xref:garden::context.adoc[context] for its own task.
 
 Because the stores all live in Git, requirements, decisions, designs, plans, and code are branched, committed, reviewed, and merged in exactly the same way. Auditability and rollback come for free.
 
@@ -152,6 +152,8 @@ Pi is a minimal coding agent. It is closer to a framework for building your own 
 
 Out of the box Pi also has no security controls at all. This is deliberate. Most agents ask the user to approve each action, but that is a false economy, because people turn the prompts off or keep blindly pressing "`accept`". Pi's philosophy is that containerization should be the basis for protecting your systems from a malicious or compromised agent, with a permissions gate added to suit your own risk appetite. So I have written {link-pi-extensions}[my own extensions] for it. One asks for confirmation, defaulting to deny, before any tool call that changes something. Another replaces Pi's built-in `bash` tool with one that never invokes a shell. A third swaps the system prompt for a named role — product manager, software architect, code reviewer — each of which can declare the model and the tools it is allowed.
 
+On top of Pi I also have two custom prompts. _Realize_ takes a design that has already been agreed and turns it into implemented work. It is the bridge between deciding _what_ to build and actually building it. _Orchestrate_ coordinates sub-agents. Rather than asking one agent to hold an entire complex task in its head, it breaks the work into well-scoped pieces and directs several agents through them. Pi has no built-in sub-agents, so this is how I get them.
+
 For work that is truly xref:garden::away-from-keyboard.adoc[away-from-keyboard] I have been building {link-genie}[Genie], which wraps Pi in a hardened container. Inside it the agent has no shell, no Git, and no network tools. It reaches the project's files only through a gated server that logs every call, and it reaches models only through a proxy on the host, which holds the API keys so the agent never sees them. That is a lot of capability traded away for accountability. The trade only pays when nobody is watching, and Genie is still a work in progress.
 
 == A team of specialists
@@ -192,15 +194,51 @@ This is only possible because of everything described above. Work is still broke
 
 So model choice is made per step, not per project. Each of my skills notes the class of model I recommend for it. And in Genie, requests are routed by role — programmer, technical lead, technical writer, security analyst — with each role mapped to a different local model.
 
+The least capable model is not always a small one. The judgment-heavy checks described below, such as architecture audits, threat modeling, and reviewing a design against its intent, are the work where frontier models earn their cost. Small, well-specified construction tasks are where a modest local model is enough. The aim is to match the model to the step, not to avoid frontier models altogether.
+
 There is a human in the loop between each step. I am removing those checkpoints, slowly, one at a time, and only where the outcomes have been consistently good.
 
 == Stability, not only throughput
 
 Most of the conversation about AI in software is about speed. But the {link-dora}[DORA research] has long measured delivery performance on two axes: xref:garden::throughput.adoc[throughput] and stability. Faster is only better if you are not also breaking things more often.
 
-LLMs are useful on the second axis, too. They can be used to dial up quality controls. A security review, an architecture audit, a threat-modeling session, a consistency check of the documentation against the code: these were once expensive enough to be occasional. Now they are cheap enough to be routine.
+I do not think raw throughput is where the real value of these tools lies. Raising the output of one station on a production line does not raise the output of the line. It relocates the bottleneck, and grows a pile of work-in-progress in front of whatever the new constraint turns out to be. In software development the constraint has not been the typing for a very long time, probably not since the arrival of high-level programming languages. The constraint is everything that surrounds the typing: agreeing what to build, deciding how to build it, reviewing it, testing it, getting it approved, and getting it released.
 
-Several of my skills exist for this purpose and produce no feature code at all.
+Most of us still work under Scrum-like processes that are, in truth, incremental waterfall. Few teams, in enterprise contexts anyway, practice genuine agile software development. Code that appears instantly still waits for the next refinement session, the next review, the next regression cycle, the next change advisory board, the next release window. Generate code ten times faster and you do not get working software ten times sooner. You get a longer queue.
+
+The real value lies in the quality of what we produce: the robustness, reliability, security, and performance of our systems. To see why, look at what we have historically been able to automate. Before AI, the only quality checks we could automate were those that could be reduced to deterministic rules: static code analysis, type checking, schema validation, the execution of runtime behavioral tests. These are enormously valuable, but they can only answer questions that somebody has already worked out how to express as a rule.
+
+The checks that matter most are not like that. Does this abstraction earn its keep? Does this design document still describe the system it claims to describe? Has this change widened the attack surface? Is this the third time we have solved the same problem, slightly differently, in three different places? Does this specification actually describe what the customer needs? These are questions of judgment, opinion, taste, and context. There is no rule to encode. They can be answered only by inference, by somebody reading the thing and forming a view.
+
+Until now, that somebody had to be a human being, which made these checks expensive. And because they were expensive, we rationed them: a design review, a pre-release threat modeling workshop, an annual architecture audit. They were occasions, not habits. When a deadline loomed, they were the first thing cut. Every methodology we have adopted includes them on paper, and hardly any team has sustained them in practice.
+
+It turns out that frontier models, given good guides, are rather good at this kind of work. That is the development worth paying attention to. Not that the cheap part of software development has become cheaper, but that the expensive part has become affordable. We can now configure agents to:
+
+* Review code changes against the project's standards, conventions, and architectural intent, not merely against its linting rules.
+
+* Run threat modeling workshops on a far more regular cadence than a human-only team can sustain.
+
+* Catch drift between the evolving implementation and the architecture and design documents, keeping the architectural artifacts synchronized with reality.
+
+* Interrogate requirements for ambiguity, unstated assumptions, and missing acceptance criteria, before any code is written.
+
+* Generate proposed architectures from requirements specifications, with the options considered and the trade-offs between them made explicit.
+
+* Decompose designs into small, incremental units of delivery, feeding backlogs and supporting continuous integration.
+
+* Audit a codebase for structural drift, such as shallow abstractions, tangled dependencies, and repeated patterns, and report back a prioritized set of remedies.
+
+* Triage incoming issues, reproducing reported defects and classifying them ahead of human review.
+
+* Validate delivered software against what users actually need, rather than only against the acceptance criteria that were agreed up front.
+
+Not one of these is a new idea. Every one is something we already knew we ought to be doing. What has changed is that they no longer need to be rationed. They can run on every change, at a cadence no team could afford to staff. Several of my skills exist for this purpose and produce no feature code at all.
+
+There is an important caveat. An inferential check produces findings, not decisions. It hands me a set of candidate problems to accept, reject, or defer. And its judgment is itself probabilistic: run it twice over the same input and it may not say the same thing twice. So it must not become a gate that passes or fails a change on its own, and it must not displace the deterministic checks. Anything that can be expressed as a rule should still be expressed as a rule, and enforced mechanically. Inference is for widening the net, not for replacing the mesh.
+
+Nor does any of this take the human out of the loop. It moves them. The work is no longer performing every check but deciding which of the findings matter. That is a far better use of an experienced engineer than reading a diff line by line. It is also work that models remain conspicuously bad at, because it depends on what they lack: knowledge of why the system came to be the way it is, of how much change the organization can absorb, and of which risks are worth carrying.
+
+So if you measure these tools by how much code they emit per hour, you are measuring the wrong station on the line. The interesting question is not how much faster we can write our software. It is how much better we can now afford to make it.
 
 == Loops and runners
 
@@ -213,6 +251,8 @@ I built an experimental one of my own. It ran workflows defined in YAML: ordered
 I have also had success using a self-hosted GitHub Actions runner to trigger agentic tasks on my own workstation. A workflow is dispatched from the command line with a prompt, the agent runs locally in a container, and the output comes back as a workflow artifact. I am not using this at the moment, either, but I will return to it for a commercial project I am working on.
 
 == What the engineer is for
+
+For decades, the developer's primary interface with the machine has been syntax: curly braces, type annotations, and the grammar of high-level programming languages. Agentic software development is a new paradigm, in which programming happens at a higher level of abstraction. It is structured, executable English. The human provides intent, architecture, and judgment, captured in artifacts: instructions, specifications, designs, plans. These are written precisely enough for an agent to act on, and for a human, a script, or another agent to verify against. The machine translates that intent into working software.
 
 Product engineering has always worked at a higher level of abstraction than syntax. Now it is easier to stay at that level, without context switching into low-level concerns. I no longer need to remember all of Java and Spring's APIs, or every AWS service. I delegate the low-level code to agents, and I review it. I just need to know the fundamentals.
 
