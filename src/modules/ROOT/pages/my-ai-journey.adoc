@@ -24,6 +24,8 @@ I have spent much of 2026 rebuilding the way I work around AI coding xref:garden
 
 This post is a snapshot of where all that has got me. It describes how one engineer works in November 2026. It is not a prescription. The tools change monthly, and my opinions about them change nearly as often — hence "`so far`".
 
+It has also been fun. AI has revived my love of programming, and I no longer work alone on my pet projects.
+
 But one conclusion has held firm through all the churn. The engineering that surrounds a model matters far more than the model itself.
 
 == Engineering, only more so
@@ -32,9 +34,11 @@ Effective use of AI in software development requires doubling down on age-old en
 
 The reason is volume. Agents produce changes faster, and in far greater quantity, than any human team can. Everything that keeps a codebase trustworthy has to scale with that output, or the codebase stops being trustworthy.
 
+Code is cheap now. Bad code is not. It may be hard to change, and it may carry real business risk. And the code in front of me may not have been written by a human at all, so I trust it even less. That is why I do not want a massive changeset to review, or a big-bang deployment to manage. I want a delivery pipeline of small increments toward a bigger goal. Just because an agent can generate a mountain of code from a single prompt does not mean it should.
+
 So my process has become more structured, not less. I now work through an explicit development lifecycle — analysis, design, planning, construction, testing, review — with each phase run as a discrete step. This is not a return to xref:garden::waterfall-model.adoc[waterfall]. The steps are small and the whole cycle is repeated for every increment. But each step is distinct, with a defined purpose, a defined input, and a defined output.
 
-Fred Brooks would recognize the shape of this. As I wrote in xref:mythical-man-month-50.adoc[my review of _The Mythical Man-Month_], the hard part of software has always been deciding precisely what to build, not typing it in. A model that generates code in seconds makes that old truth more obvious than ever.
+Fred Brooks would recognize the shape of this. As I wrote in xref:mythical-man-month-50.adoc[my review of _The Mythical Man-Month_], the hard part of software has always been deciding precisely what to build, not typing it in. A model that generates code in seconds makes that old truth more obvious than ever. The core of the craft is learning about a problem and then creating software to address it. Writing program code has not been the core of it for a long time.
 
 == Artifacts at the seams
 
@@ -74,7 +78,17 @@ In 2024 I made xref:rfcs.adoc[the case for RFCs and decision logs]. The argument
 
 Nearly every repository of mine now has an `AGENTS.md` file at its root. It describes the project's structure, tools, and rules, and it points to the technical standards that govern the work, each with a note on when to consult it. Agents fetch the detail on demand, when the task calls for it.
 
-There is a deeper shift here, too. I now treat the specification — not the code — as the xref:garden::single-source-of-truth.adoc[source of truth]. When the behavior of a system needs to change, the change starts in the spec. The code is derived from it. This is the idea behind xref:garden::spec-driven-development.adoc[spec-driven development]. I subscribe to it, with one caveat that I will come to.
+There is a deeper shift here, too. I now treat the specification — not the code — as the xref:garden::single-source-of-truth.adoc[source of truth]. When the behavior of a system needs to change, the change starts in the spec. The code is derived from it. This is the idea behind xref:garden::spec-driven-development.adoc[spec-driven development]. I subscribe to it, with two caveats. The first is about how it is practiced. The second I will come to later.
+
+Spec-driven development, practiced naively, is agentic waterfall: write a big specification, then have an agent generate all the code in one go. A related teaching, that when the code is wrong you never debug it but go back and fine-tune the spec, is vibe coding by a different name. What I practice is _fine-grained, iterative_ spec-driven development. It is big design up front, but with feedback loops, and the work is delivered in small increments. Agents help me move through those cycles quickly. The steps are still disciplined and deliberate.
+
+== Where judgment stays human
+
+Some parts of the lifecycle I do not hand over.
+
+The first is discovering the problem. Understanding what the client or the business really needs is a human-centric activity, a kind of behavioral engineering that depends on conversation. I do not chain agents together for this phase. Agents can help at the edges, for example by reviewing the language I use for consistency with the business's terminology, but the understanding has to be mine.
+
+The second is architectural design. This calls for _good taste_, and I do not want to rely on an agent's choices. Frontier models are increasingly good design partners. I ask them for a menu of options, each with its trade-offs, and then I choose. Ultimately we are designing products for ourselves, and only humans understand what humans need.
 
 == Try not to write anything
 
@@ -110,6 +124,12 @@ Pi is a minimal coding agent. It is closer to a framework for building your own 
 
 For work that is truly xref:garden::away-from-keyboard.adoc[away-from-keyboard] I have been building {link-genie}[Genie], which wraps Pi in a hardened container. Inside it the agent has no shell, no Git, and no network tools. It reaches the project's files only through a gated server that logs every call, and it reaches models only through a proxy on the host, which holds the API keys so the agent never sees them. That is a lot of capability traded away for accountability. The trade only pays when nobody is watching, and Genie is still a work in progress.
 
+== A team of specialists
+
+Working with agents has turned out to be closer to managing people than I expected. I now have a small team of junior developers, testers, reviewers, and technical proofreaders. Some are little more than rubber ducks. Some I delegate work to, always with oversight. Each has its own personality, and all of them are equally over-confident in their abilities.
+
+I keep them small and specialized, in line with the single responsibility principle. Each has clear boundaries, a persona such as software tester, and a role it is expected to fulfil. Narrowing an agent's scope limits the freedom it has to wander, which also reduces the probability of hallucination.
+
 == Owning every commit
 
 The other half of my setup is the environment the agents run in.
@@ -126,7 +146,7 @@ This is the control that matters most to me. Everything committed in my name, I 
 
 == Reviewing everything, for now
 
-I said I had one caveat about treating specs as the source of truth. Here it is.
+I said I had two caveats about treating specs as the source of truth. Here is the second.
 
 In theory, if the acceptance criteria in a specification are executable, then passing tests tell you the software is correct, and nobody needs to read the code. I am not there yet. I still want to review all output. I am not quite at the level where I am happy to rely on executable specifications alone.
 
@@ -161,6 +181,14 @@ The logical next step from all this is xref:garden::loop-engineering.adoc[loop e
 I built an experimental one of my own. It ran workflows defined in YAML: ordered pipelines of script steps and agent steps, with typed outputs passed between them, limits on turns and time, and a state file so that a failed run could be resumed. I have abandoned it for now, because I do not currently have a use case that justifies it. That may change.
 
 I have also had success using a self-hosted GitHub Actions runner to trigger agentic tasks on my own workstation. A workflow is dispatched from the command line with a prompt, the agent runs locally in a container, and the output comes back as a workflow artifact. I am not using this at the moment, either, but I will return to it for a commercial project I am working on.
+
+== What the engineer is for
+
+Product engineering has always worked at a higher level of abstraction than syntax. Now it is easier to stay at that level, without context switching into low-level concerns. I no longer need to remember all of Java and Spring's APIs, or every AWS service. I delegate the low-level code to agents, and I review it. I just need to know the fundamentals.
+
+Expertise shifts toward _evaluating_ code and _orchestrating_ its construction. How reliable is it? Is it secure? Will it scale? Answering those questions takes a deep understanding of how systems work. So the skills I think are worth investing in now are computational thinking, critical thinking, systems thinking, AI literacy, problem solving, and the ability to evaluate outputs.
+
+The job is no longer to write lines of code. It is to understand the whole architecture and the trade-offs made in its design.
 
 == What comes next
 
