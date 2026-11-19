@@ -1,6 +1,6 @@
 = My AI journey (so far)
 Kieran Potts, 18 November 2026
-:description: A snapshot of how I work with AI coding agents in late 2026, and some predictions for how I think software engineering will change in the years ahead.
+:description: A snapshot of how I work with AI coding agents in late 2026.
 :docinfo: shared
 :nofooter:
 
@@ -20,21 +20,29 @@ Kieran Potts, 18 November 2026
 :link-tpl-specs:     https://github.com/kieranpotts/specs
 :link-willison:      https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/
 
-I've spent much of 2026 rethinking how I work. This post is a snapshot of where I am in mid-November. New models, harnesses, and tools arrive every day, but the broad categories they fall into look increasingly stable. Meanwhile, my new ways of working are settling into a consistent pattern.
+I've spent much of 2026 rethinking how I work. This post is a snapshot of where I'm at now. New models, harnesses, and tools arrive every day, but the broad categories they fall into look increasingly stable. Meanwhile, my new ways of working are settling into a consistent pattern. So it's time to do a write-up.
 
-It has been fun. AI has revived my love of programming. I no longer work alone on my pet projects. Even when I'm solo, it feels like collaboration. I can onboard into unfamiliar problem spaces and existing codebases much faster, pick up new languages (Kotlin), and get better at ones I already know (Java).
+It has been fun. AI has revived my love of programming. I no longer work alone on my pet projects. Even when I'm solo, it feels like collaboration. Plus, I can onboard into unfamiliar problem spaces and existing codebases much faster than I ever could before. And it is easier to learn new languages, and get better at familiar ones, on-the-job. (I'm loving getting Kotlin right now!)
 
-I made one assumption at the start, and it has held true: getting the most out of AI tools means doubling down on classic engineering methods, not discarding them.
+I made one assumption at the start of this journey, that getting the most out of AI tools will require doubling down on classic engineering methods, not discarding them. Well-defined constraints and requirements, considered design, construction in small increments, automated tests, and plentiful feedback loops. I expected AI to displace none of these, and I designed by AI-assisted development workflow accordingly.
+
+This assumption has held true. If anything, evergreen principles of good software engineering carry more weight than ever. Structured engineering practices produce structured artifacts that provide valuable knowledge to LLMs via context. xxxxx
 
 == My current toolkit
 
-I work in two modes, with a different tool for each.
+I work in two modes, with a different toolkit for each.
 
-For at-keyboard work I use {link-claude-code}[Claude Code] in VS Code, Zed, or the terminal. This is synchronous work. I give an instruction, watch what the agent does, approve changes, and steer through loop iterations and single-shot prompts. This is my choice for high-level design, and for anything ambiguous, where the solution is hazy or the outcome depends on human judgment.
+For at-keyboard work I mostly use {link-claude-code}[Claude Code] in VS Code, Zed, or the terminal. This is synchronous work. I give an instruction, watch what the agent does, approve changes, and steer through follow-up prompts. I'm manually managing the agent loop and the context. This is my default way of working for high-level design and for anything ambiguous, where the solution is hazy or the outcome depends on human judgment.
 
-All of my repositories are now checked out as Git worktrees: a bare clone, with one working tree per branch alongside it. A piece of work can be given a checkout of its own without disturbing any other.
+Even with real-time oversight, I want to keep agents isolated from my host system. So I always open my code repositories in a devcontainer (which I also load Claude Code CLI into). Only my workspace directory is mounted from the host, not the rest of my home directory, and agents run as a non-root user. There is no Docker in the container and no route to the host's Docker daemon, since access to that amounts to root on the host.
+
+Previously, I had locked agents out of using Git inside the container. I would review all changes from the dirty working tree before committing myself from the host. I've relaxed this, recently. I now use `AGENTS.md` files to instruct agents _not_ to commit anything, and they mostly follow that rule. Where they do not, it's an easy job to revert the revision if I'm not happy with it. It is more convenient for me to commit from inside the container, but a consequence is that I now mount my `~/.ssh` directory into the container. It's read-only, but I make sure the mounted private key is used solely for GitHub/GitLab authorization — in case it should be compromised. There's some risk here, and I would not do this for commercial projects. My GPG signing key stays on the host, at least — the container only uses the host's `gpg-agent` and a copy of my public keyring.
+
+// *** UP TO HERE ***
 
 I always work in a devcontainer. There is one container for my whole personal workspace, with every repository mounted into it. Agents run inside that container as a non-root user. There is no Docker in there, because access to the host's Docker daemon amounts to root on the host.
+
+All of my repositories are now checked out as Git worktrees: a bare clone, with one working tree per branch alongside it. A piece of work can be given a checkout of its own without disturbing any other.
 
 But Claude Code does a lot behind the scenes to manipulate the context, which makes it a poor foundation for stable, repeatable workflows. That is one reason I do not use it for background, away-from-keyboard work, which suits tasks that are more predictable, such as producing code to a well-defined design.
 
