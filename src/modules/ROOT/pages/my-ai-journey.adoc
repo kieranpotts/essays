@@ -26,103 +26,109 @@ It has been fun. AI has revived my love of programming. I no longer work alone o
 
 Plus, I can onboard into unfamiliar problem spaces and existing codebases much faster than I ever could before. And it is easier to learn new languages, and get better at familiar ones, on-the-job. (I'm loving getting to know Kotlin right now!)
 
-Along the way I have written a collection of agent skills, extended one xref:garden::agent-harness.adoc[agent harness] and built a hardened sandbox around it, built and shelved a workflow engine, restructured every repository in my personal workspace, and written a technical standard, xref:standards::061.adoc[TS-61: AI Tools], to pin down what I learned.
+I made one assumption at the start of this journey, which is that getting the most out of AI tools will require doubling down on classic engineering methods — not discarding them. I mean disciplined change management, and fast, numerous feedback loops that give early and continuous signals on quality: automated tests, static analysis, continuous integration, peer review, and continuous user testing of the evolving software. I expected AI to displace none of these methods and tools, and I designed my AI-assisted development workflow accordingly. This assumption has held true. If anything, evergreen principles of good software engineering carry more weight than ever.
 
-I made one assumption at the start of this journey, which is that getting the most out of AI tools will require doubling down on classic engineering methods — not discarding them. I expected AI to displace none of them, and I designed my AI-assisted development workflow accordingly. This assumption has held true. If anything, evergreen principles of good software engineering carry more weight than ever.
+I work in two modes. _At-keyboard_ work is synchronous. I give an agent an instruction, watch what it does, approve changes, and steer through follow-up prompts. _Away-from-keyboard_ work runs in the background, on tasks predictable enough that I can check the outcome rather than every step. Much of what follows in this blog post depends on which mode I'm operating in.
 
-I work in two modes. _At-keyboard_ work is synchronous: I give an instruction, watch what the agent does, approve changes, and steer through follow-up prompts. _Away-from-keyboard_ work runs in the background, on tasks predictable enough that I can check the outcome rather than every step. Much of what follows depends on which mode I'm in.
+See also xref:standards::061.adoc[TS-61: AI Tools], which captures my thinking on current best practices for using AI tools in software development workflows.
 
-The rest of this post is about how I put all this into practice. It moves from process (how I structure the work), to trust (why I extend so little of it to agents), to tools (what that looks like in practice), and finally to why it matters. Skip to whichever part interests you.
+== Doubling down on engineering fundamentals
 
-== Engineering, only more so
+Effective use of AI in software development requires doubling down on age-old engineering practice. Well-defined requirements. Considered architectural trade-offs. Iterative design. Construction in small increments. Automated tests. xref:garden::version-control.adoc[Version control]. Plentiful feedback loops. And decisions grounded in data — not least real-world user experience of working software.
 
-=== More output needs more discipline
+None of this has been displaced. Indeed, good engineering practice now carries more load. The reason is volume. Agents produce changes faster than any human team can. So everything that keeps a codebase correct and stable has to scale with that increased rate of change.
 
-Effective use of AI in software development requires doubling down on age-old engineering practice. Well-defined requirements. Considered architectural trade-offs. Iterative design. Construction in small increments. Automated tests. xref:garden::version-control.adoc[Version control]. Review. Plentiful feedback loops, and decisions grounded in data — not least real-world user experience of working software. None of this has been displaced. All of it now carries more load.
+Code is cheaper now than it ever has been. There probably has not been such a sudden increase in the commoditization of computer program code since the dawn of high-level programming languages. But it is also less trustworthy. The code in front of me may not have been written by a human at all. In fact, no human may have ever set eyes on it before.
 
-The reason is volume. Agents produce changes faster, and in far greater quantity, than any human team can. Everything that keeps a codebase trustworthy has to scale with that output, or the codebase stops being trustworthy.
+For this reason, I have increasingly less trust in new code that is put before me. In turn, I want even less to review massive changesets, or to manage big-bang deployments. Now more than ever I want a delivery pipeline of small increments toward a bigger goal.
 
-Code is cheap now. Bad code is not. It may be hard to change, and it may carry real business risk. And the code in front of me may not have been written by a human at all, so I trust it even less. That is why I do not want a massive changeset to review, or a big-bang deployment to manage. I want a delivery pipeline of small increments toward a bigger goal. Just because an agent can generate a mountain of code from a single prompt does not mean it should.
+Just because an agent can generate a mountain of code from a single prompt does not mean I should allow it to do so.
 
-=== A lifecycle, not a waterfall
+== Beware agentic waterfall
 
 The ways I work have fundamentally changed. But the underlying phases of the software development lifecycle are the same as they have ever been.
 
-So my process has become more structured, not less. I now work through an explicit development lifecycle — analysis, design, planning, construction, testing, review — with each phase run as a discrete step. This is not a return to xref:garden::waterfall-model.adoc[waterfall]. The steps are small and the whole cycle is repeated for every increment. But each step is distinct, with a defined purpose, a defined input, and a defined output.
+My process has become more structured, not less. I now work through an explicit development lifecycle — analysis, design, planning, construction, testing, review — with each phase run as a discrete step.
 
-=== The hard part was never the typing
+This is not a return to xref:garden::waterfall-model.adoc[waterfall]. The steps are small and the whole cycle is repeated for every increment. But each step is distinct, with a defined purpose, a defined input, and a defined output.
 
-Fred Brooks would recognize the shape of this. As I wrote in xref:mythical-man-month-50.adoc[my review of _The Mythical Man-Month_], the hard part of software has always been deciding precisely what to build, not typing it in. A model that generates code in seconds makes that old truth more obvious than ever. The core of the craft is learning about a problem and then creating software to address it. Writing program code has not been the core of it for a long time, probably not since the arrival of high-level programming languages.
+xref:mythical-man-month-50.adoc[Fred Brooks] would recognize the shape of this. As he proclaimed in _The Mythical Man-Month_, the hard part of software has always been deciding what to build, not typing it in. An AI agent that generates code in seconds makes that old truth more obvious than ever. The core of the craft is learning about a problem and then creating software to address it.
 
-== The lifecycle, written down
+Writing program code has not been the core of software development for a long time.
 
-=== The seams between phases
+== xxxxxxxxxx
 
-The most important parts of a structured lifecycle are the seams between its phases.
+The most important parts of a structured software development lifecycle are at the seams between its phases.
 
 Every phase consumes an artifact and produces another. Analysis produces a specification. Design consumes that specification and produces design docs and decision records. Planning consumes both and produces a delivery plan, broken down into small increments. Construction consumes one increment at a time.
 
-Human teams get away with fuzzy seams, because people fill in the gaps by talking to each other. Agents cannot. An agent starts every session knowing nothing about the project. Whatever is not written in the artifact it is handed does not exist, as far as that agent is concerned.
+So the inputs and outputs at each seam must be well defined. I have built a set of template repositories for exactly this purpose.
 
-=== A store for every artifact
+* *{link-tpl-specs}[Specs].* What the system does, in business terms.
 
-So the inputs and outputs at each seam must be well defined. I have built a set of template repositories for exactly this purpose:
+* *{link-tpl-rfc}[RFCs].* How significant technical decisions were made, and why.
 
-* *{link-tpl-specs}[Specs]*: what the system does, in business terms.
+* *{link-tpl-design}[Design docs].* What the system looks like in production.
 
-* *{link-tpl-rfc}[RFCs]*: how significant technical decisions were made, and why.
+* *{link-tpl-plans}[Plans].* When, and in what order, the work gets done.
 
-* *{link-tpl-design}[Design docs]*: what the system looks like in production.
+* *{link-tpl-audits}[Audits].* Point-in-time evaluations of the as-built architecture.
 
-* *{link-tpl-plans}[Plans]*: when, and in what order, the work gets done.
-
-* *{link-tpl-audits}[Audits]*: point-in-time evaluations of the as-built architecture.
-
-* *{link-tpl-risks}[Risks]*: the security and privacy risks the system carries.
+* *{link-tpl-risks}[Risks].* The security and privacy risks the system carries.
 
 Each one is a version-controlled store with a defined lifecycle. A proposal to change the requirements, for example, moves from draft, to proposed, to accepted, to released. Each store ships with small skills that drive those state transitions.
 
 Because the stores all live in Git, requirements, decisions, designs, plans, and code are branched, committed, reviewed, and merged in exactly the same way. Auditability and rollback come for free.
 
-=== A skill for every phase
+Sitting above the stores is my {link-skills}[collection of agent skills], which covers the phases of the lifecycle itself: specify, design, plan, code, test, review, and so on. The skills are harness-agnostic. They describe how I want the work done, not which product is doing it, so the same workflow carries from one agent to another without being rewritten.
 
-Sitting above the stores is my {link-skills}[collection of agent skills], which covers the phases of the lifecycle itself: specify, design, plan, code, test, review, and so on. The skills are harness-agnostic: they describe how I want the work done, not which product is doing it, so the same workflow carries from one agent to another without being rewritten. They are also deliberately independent. No skill hands off to another. The stores are the persistence layer between them. An agent working on an upstream step writes an artifact to a store, and an agent working on a downstream step — a different session, perhaps a different model — reads it as xref:garden::context.adoc[context] for its own task.
+My agent skills are also deliberately independent. No skill hands off to another. The stores are the persistence layer between them. An agent working on an upstream step writes an artifact to a store, and an agent working on a downstream step — a different session, perhaps a different model — reads it as xref:garden::context.adoc[context] for its own task.
 
-=== Documentation is the context
+== Documentation is the context
 
-xref:garden::documentation.adoc[Documentation] is the key to all of this.
+Documentation is the key to all of this.
 
-Structured engineering practices produce structured artifacts, and those artifacts provide valuable knowledge to LLMs via context. If everything is written down in a durable artifact, in a structured and consistent way, including the architectural designs and the decisions behind them, then it all becomes high-quality context for agents. The better the written record of a system, the better the agent's work, because an agent can only act on what it's been given. xref:garden::context-engineering.adoc[Context engineering] turns out to be mostly a documentation problem.
+Structured engineering practices produce structured artifacts, and those artifacts provide valuable knowledge to LLMs via context. If everything is written down in a durable artifact, in a structured and consistent way, including the architectural designs and the decisions behind them, then it all becomes high-quality context for agents. The better the written record of a system, and the decisions behind it, the better the agent's work, because an agent can only act on what it's been given.
 
-In 2024 I made xref:rfcs.adoc[the case for RFCs and decision logs]. The argument then was about people: a decision log records _why_ a system is made the way it is, so that knowledge survives after the original decision makers have moved on. That argument now applies with even greater force. An agent is the ultimate new starter. It joins the project with no history, every single session, and it reads everything you give it.
+xref:garden::context-engineering.adoc[Context engineering] turns out to be mostly a documentation problem.
+
+// xref:rfcs.adoc[In 2024 I made the case for RFCs and decision logs.] The argument then was about people. A decision log records _why_ a system is made the way it is, so that knowledge survives after the original decision makers have moved on. That argument now applies with even greater force. An agent is the ultimate new starter. It joins the project with no history, every single session, and it reads everything you give it.
 
 Nearly every repository of mine now has an `AGENTS.md` file at its root. It describes the project's structure, tools, and rules, and it points to the technical standards that govern the work, each with a note on when to consult it. Agents fetch the detail on demand, when the task calls for it.
 
-=== The spec is the source of truth
+== The spec is the source-of-truth
 
-There is a deeper shift here, too. I now treat the specification — not the code — as the xref:garden::single-source-of-truth.adoc[source of truth]. When the behavior of a system needs to change, the change starts in the spec. The code is derived from it. This is the idea behind xref:garden::spec-driven-development.adoc[spec-driven development]. I subscribe to it, with a caveat about how it is practiced.
+There is a deeper shift here, too. I now treat the specification — not the code — as the xref:garden::single-source-of-truth.adoc[source-of-truth]. When the behavior of a system needs to change, the change starts in the spec. The code is derived from it.
 
-Spec-driven development, practiced naively, is agentic waterfall: write a big specification, then have an agent generate all the code in one go. A related teaching, that when the code is wrong you never debug it but go back and fine-tune the spec, is vibe coding by a different name. What I practice is _fine-grained, iterative_ spec-driven development. It is big design up front, but with feedback loops, and the work is delivered in small increments. Agents help me move through those cycles quickly. The steps are still disciplined and deliberate.
+This is the idea behind xref:garden::spec-driven-development.adoc[spec-driven development]. I subscribe to it, with a caveat about how it is practiced.
+
+Spec-driven development, practiced naively, is just agentic waterfall. Write a big specification, then have an agent generate all the code in one go. A related teaching, that when the code is wrong you never debug it but go back and fine-tune the spec, is vibe coding by a different name.
+
+What I practice is _fine-grained, iterative_ spec-driven development. It is big-design-up-front, but with feedback loops and iterative design, and the work is delivered in small increments.
+
+Agents help me move through those cycles quickly. The steps are still disciplined and deliberate.
 
 == Working with a team of agents
 
-=== Where judgment stays human
-
 Some parts of the lifecycle I do not hand over.
 
-The first is discovering the problem. Understanding what the client or the business really needs is a human-centric activity, a kind of behavioral engineering that depends on conversation. I do not chain agents together for this phase. Agents can help at the edges, for example by reviewing the language I use for consistency with the business's terminology, but the understanding has to be mine.
+The first is discovering the problem. Understanding what the user, customer, or the business really needs is a human-centric activity, a kind of behavioral engineering that depends on conversation.
 
-The second is architectural design. This calls for _good taste_, and I do not want to rely on an agent's choices. Frontier models are increasingly good design partners. I ask them for a menu of options, each with its trade-offs, and then I choose. Ultimately we are designing products for ourselves, and only humans understand what humans need.
+I do not chain agents together for this phase. Agents can help at the edges, for example by reviewing the domain language used in the software for consistency with the business's terminology, but the understanding has to be mine.
 
-=== Small, specialized agents
+The second is architectural design. This calls for _good taste_, and I do not want to rely on an agent's choices. Frontier models are increasingly good design partners. I ask them for a menu of options, each with its trade-offs, and then I choose.
 
-For everything else, working with agents has turned out to be closer to managing people than I expected. I now have a small team of junior developers, testers, reviewers, and technical proofreaders. Some are little more than rubber ducks. Some I delegate work to, always with oversight. Each has its own personality, and all of them are equally over-confident in their abilities.
+Ultimately we are designing products for ourselves, and only humans understand what humans need.
 
-I keep them small and specialized, in line with the single responsibility principle. Each has clear boundaries, a persona such as software tester, and a role it is expected to fulfill. A general-purpose coding assistant is the right persona for writing code and the wrong one for most of the work around it. Ask it to specify requirements and it hands back an implementation plan. Ask it to review a change and it rewrites the change. Narrowing an agent's scope limits its freedom to wander, which in my experience also makes it less prone to hallucinate. This mirrors the structure of a human team, with each agent focused on one part of the lifecycle. But a team of agents is still a team of agents.
+For everything else, working with agents has turned out to be closer to managing people than I expected. I now have a small team of junior developers, testers, reviewers, and technical proofreaders. Some are little more than rubber ducks. Some I delegate work to, always with oversight. Each has its own personality. And all of them are equally over-confident in their abilities!
 
-=== The least capable model
+I keep my agents small and specialized, in line with the single responsibility principle. Each agent has clear boundaries, a persona, and a role it is expected to fulfill — such as software tester.
 
-It is tempting to turn to the most powerful model for every task. I aim for the opposite: to run the _least_ capable model that can do the job, which is to say the cheapest.
+Narrowing an agent's scope limits its freedom to wander, which in my experience also makes it less prone to hallucinate.
+
+== Choosing models
+
+It is tempting to turn to the most powerful model for every task. I aim for the opposite, to run the _least_ capable model that can do the job, which is to say the cheapest.
 
 This is only possible because of the structure I have described. Work is still broken down into small, incremental chunks. A small, well-specified task, supplied with good context, is within reach of a modest model running on my own machine. A large, vague one will defeat even a frontier model.
 
