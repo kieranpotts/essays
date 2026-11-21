@@ -28,7 +28,11 @@ Plus, I can onboard into unfamiliar problem spaces and existing codebases much f
 
 I made one assumption at the start of this journey, which is that getting the most out of AI tools will require doubling down on classic engineering methods — not discarding them. I mean disciplined change management, and fast, numerous feedback loops that give early and continuous signals on quality: automated tests, static analysis, continuous integration, peer review, and continuous user testing of the evolving software. I expected AI to displace none of these methods and tools, and I designed my AI-assisted development workflow accordingly. This assumption has held true. If anything, evergreen principles of good software engineering carry more weight than ever.
 
-I work in two modes. _At-keyboard_ work is synchronous. I give an agent an instruction, watch what it does, approve changes, and steer through follow-up prompts. _Away-from-keyboard_ work runs in the background, on tasks predictable enough that I can check the outcome rather than every step. Much of what follows in this blog post depends on which mode I'm operating in.
+There are three distinct ways of working with AI on software, and what separates them is how correctness is established. In xref:garden::vibe-coding.adoc[vibe coding], correctness is established by observation: the code runs, the output looks right, and nobody reads it. In xref:garden::agentic-engineering.adoc#_the_spectrum[AI-assisted development], correctness is established by human inspection: a developer reads and reviews every change before accepting it. In xref:garden::agentic-engineering.adoc[agentic development], correctness is established by verification engineered into the workflow itself, which gives agents self-verifiable criteria for what "`done`" and "`correct`" mean.
+
+Agentic development can look like vibe coding from the outside, because no human reads every line. But the two could hardly be less alike. Vibe coding removes the review step and puts nothing in its place. Agentic development replaces line-by-line review with guides, sensors, and explicit success criteria. Vibe coding has its place, in throwaway prototypes and experiments, but this post is about the other two. I sit somewhere between them: I build the verification into my workflows, and I still review the output, for reasons I come to later.
+
+Cutting across those categories, I work in two modes. _At-keyboard_ work is synchronous. I give an agent an instruction, watch what it does, approve changes, and steer through follow-up prompts. _Away-from-keyboard_ work runs in the background, on tasks predictable enough that I can check the outcome rather than every step. Much of what follows in this blog post depends on which mode I'm operating in.
 
 See also xref:standards::061.adoc[TS-61: AI Tools], which captures my thinking on current best practices for using AI tools in software development workflows.
 
@@ -120,11 +124,15 @@ The second is architectural design. This calls for _good taste_, and I do not wa
 
 Ultimately we are designing products for ourselves, and only humans understand what humans need.
 
-For everything else, working with agents has turned out to be closer to managing people than I expected. I now have a small team of junior developers, testers, reviewers, and technical proofreaders. Some are little more than rubber ducks. Some I delegate work to, always with oversight. Each has its own personality. And all of them are equally over-confident in their abilities!
+For everything else, working with agents has turned out to be closer to managing people than I expected. I now have a small team of junior developers, testers, reviewers, and technical proofreaders. Some are little more than xref:garden::rubber-ducking.adoc[rubber ducks]. Some I delegate work to, always with oversight. Each has its own personality. And all of them are equally over-confident in their abilities!
 
 I keep my agents small and specialized, in line with the single responsibility principle. Each agent has clear boundaries, a persona, and a role it is expected to fulfill — such as software tester.
 
 Narrowing an agent's scope limits its freedom to wander, which in my experience also makes it less prone to hallucinate.
+
+There is a second reason to keep agents separate, and it is about context. Models are sycophantic. They take on whatever stance their context implies, and their default stance is agreement. An agent asked to review code it has just written is reviewing its own reasoning, which is still sitting in its context window, and it is strongly inclined to approve. So a reviewer needs a fresh session, unpolluted by the reasoning that produced the work: it sees only the work itself, and the standards to judge it against. Ideally it runs on a different model, too, with different blind spots.
+
+How the reviewer is framed matters as much. Ask a model "`does this look right?`" and the question invites a yes. So I tell my reviewers to assume the work is broken, and to prove it, rather than to check it for obvious problems. A persona does not make an agent correct, but an adversarial one at least makes agreement the harder path.
 
 == Choosing models
 
@@ -170,9 +178,15 @@ There is a second caveat to treating specs as the source of truth.
 
 In theory, if the acceptance criteria in a specification are executable, then passing tests tell you the software is correct, and nobody needs to read the code. I am not there yet. I still review all output, and I am not ready to rely on executable specifications alone.
 
+Executable specifications bring a discipline of their own: an agent must never be able to change the criteria it is graded against. An agent that can edit a test can make it pass in two ways, by fixing the code or by weakening the test, and from outside the session the two look the same. So agents do not touch an existing test suite without my say-so. Where an agent writes new tests, I review them more carefully than the code they exercise, because a test that an agent wrote from its own reading of a requirement verifies that reading, not the requirement. Where it is practical, the better order is the test-driven one: I write the tests, and the agent makes them pass.
+
 That will change by degrees. As my trust in these tools and ways of working grows, backed by a track record, I expect to spend less time on review.
 
 But I think I will always do some. A test suite demonstrates behavior. It says very little about structure. Whether a change introduces threads, for example, and whether it uses them safely, is an architectural concern that tests are bad at exposing and that is expensive to get wrong. Those are the decisions I expect to keep reviewing for myself.
+
+=== Checking every dependency
+
+One kind of output gets extra scrutiny: new dependencies. A model will sometimes name a package that does not exist, and attackers now register packages under the names that models are known to invent. So before I install anything an agent proposes, I check that the package exists in the official registry, that it is the project the agent meant, and that its publisher and release history look plausible. No agent adds a dependency without my approval, and a change to a lockfile gets the same review as a change to the code. A lockfile diff is long, machine-generated, and easy to skim past, which is exactly why a substituted package would hide there.
 
 === Owning every commit
 
@@ -223,6 +237,8 @@ As an industry, we're still figuring out what a good coding agent harness looks 
 Pi is a minimal coding agent. It is closer to a framework for building your own harness than a finished product. Its motto is to adapt the coding agent to your needs, not the other way around. It is built on the principle that we should be able to modify our own agentic workflows. Right now I want to experiment with ideas quickly, so a minimal, extensible core suits me.
 
 Pi's system prompt is under 1,000 tokens, roughly a tenth the size of Claude Code's, and that default prompt can be extended or replaced entirely. Tools, commands, events, and interface components can all be extended, too, and bundled into packages that hot-reload. By design there is no MCP, no subagents, no plan mode, no background bash, and no built-in to-do list — but there's a large registry of third-party packages that add all these things, or you can quite easily ask a capable model to write your own extensions.
+
+Whichever harness I use, I try to stay vendor neutral. A model can be deprecated, repriced, or quietly degraded upstream, and a harness can change direction or disappear, so depending on a single vendor is a risk like any other. The things I invest in most are therefore portable. My skills are harness-agnostic. Every repository has an `AGENTS.md` file, an open convention that most harnesses read, and where a harness wants something else, such as Claude Code's `CLAUDE.md`, that file is a one-line import of `AGENTS.md`. Pi will drive any model, including the open-weight models I run myself. Claude Code is the exception, tied to one vendor's models. I accept that for at-keyboard work, because the skills, standards, and stores I have built would carry over to another harness.
 
 === Extending Pi
 
