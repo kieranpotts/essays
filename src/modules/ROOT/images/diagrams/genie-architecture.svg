@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="480px" height="543px" viewBox="-0.5 -0.5 480 543">
+    <title>Pi runs in a hardened container on an internal network, reaching the project's files only through an MCP gateway and a filesystem server, and reaching models only through a model proxy on the host, which holds the API keys</title>
+    <g>
+        <rect x="1" y="1" width="478" height="346" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="2 4"/>
+        <text x="240" y="21" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="inherit" font-weight="bold" fill="currentColor">Internal Network, No Internet</text>
+        <rect x="21" y="41" width="438" height="116" fill="var(--base-page, #ffffff)" stroke="currentColor" stroke-width="2"/>
+        <text x="240" y="69" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="inherit" font-weight="bold" fill="currentColor">
+            <tspan x="240" dy="-8">Pi in a Hardened Container</tspan>
+            <tspan x="240" dy="16">No Shell, No Git, No Network Tools</tspan>
+        </text>
+        <rect x="41" y="97" width="126" height="40" fill="var(--base-page, #ffffff)" stroke="currentColor" stroke-width="2"/>
+        <text x="104" y="117" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="inherit" font-weight="bold" fill="currentColor">MCP Client</text>
+        <rect x="177" y="97" width="126" height="40" fill="var(--base-page, #ffffff)" stroke="currentColor" stroke-width="2"/>
+        <text x="240" y="117" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="inherit" font-weight="bold" fill="currentColor">Secret Sentry</text>
+        <rect x="313" y="97" width="126" height="40" fill="var(--base-page, #ffffff)" stroke="currentColor" stroke-width="2"/>
+        <text x="376" y="117" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="inherit" font-weight="bold" fill="currentColor">Audit Log</text>
+        <path d="M 104 137 L 104 199" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M 104 207 L 99 197 L 109 197 Z" fill="currentColor" stroke="none"/>
+        <text x="180" y="182" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="inherit" font-weight="bold" fill="currentColor">File Tool Calls</text>
+        <rect x="21" y="207" width="166" height="40" fill="var(--base-page, #ffffff)" stroke="currentColor" stroke-width="2"/>
+        <text x="104" y="227" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="inherit" font-weight="bold" fill="currentColor">MCP Gateway</text>
+        <path d="M 104 247 L 104 279" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M 104 287 L 99 277 L 109 277 Z" fill="currentColor" stroke="none"/>
+        <text x="186" y="267" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="inherit" font-weight="bold" fill="currentColor">Allowlisted Tools</text>
+        <rect x="21" y="287" width="166" height="40" fill="var(--base-page, #ffffff)" stroke="currentColor" stroke-width="2"/>
+        <text x="104" y="307" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="inherit" font-weight="bold" fill="currentColor">Filesystem Server</text>
+        <path d="M 104 327 L 104 389" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M 104 397 L 99 387 L 109 387 Z" fill="currentColor" stroke="none"/>
+        <text x="180" y="372" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="inherit" font-weight="bold" fill="currentColor">One Project Only</text>
+        <rect x="21" y="397" width="166" height="52" fill="var(--base-page, #ffffff)" stroke="currentColor" stroke-width="2"/>
+        <text x="104" y="423" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="inherit" font-weight="bold" fill="currentColor">Project Files</text>
+        <path d="M 376 157 L 376 389" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M 376 397 L 371 387 L 381 387 Z" fill="currentColor" stroke="none"/>
+        <text x="306" y="227" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="inherit" font-weight="bold" fill="currentColor">
+            <tspan x="306" dy="-8">Model Requests,</tspan>
+            <tspan x="306" dy="16">No API Keys</tspan>
+        </text>
+        <rect x="293" y="397" width="166" height="52" fill="var(--base-page, #ffffff)" stroke="currentColor" stroke-width="2"/>
+        <text x="376" y="423" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="inherit" font-weight="bold" fill="currentColor">
+            <tspan x="376" dy="-8">Model Proxy</tspan>
+            <tspan x="376" dy="16">Holds the API Keys</tspan>
+        </text>
+        <path d="M 376 449 L 376 481" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M 376 489 L 371 479 L 381 479 Z" fill="currentColor" stroke="none"/>
+        <rect x="293" y="489" width="166" height="52" fill="var(--base-page, #ffffff)" stroke="currentColor" stroke-width="2"/>
+        <text x="376" y="515" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="inherit" font-weight="bold" fill="currentColor">
+            <tspan x="376" dy="-8">Local and</tspan>
+            <tspan x="376" dy="16">Cloud Models</tspan>
+        </text>
+    </g>
+</svg>
