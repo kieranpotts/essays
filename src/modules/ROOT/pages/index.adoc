@@ -8,7 +8,7 @@ Occasional essays on the craft of software engineering — the state of the art,
 link:/feeds/atom.xml[Atom], or link:/feeds/feed.json[JSON Feed].
 
 * xref:my-ai-journey.adoc[My AI journey (so far)] +
-  [.small]#18 November 2026#
+  [.small]#22 November 2026#
 
 * xref:margaret-hamilton.adoc[Margaret Hamilton, the first software engineer, 1936-2026] +
   [.small]#19 October 2026#

@@ -1,5 +1,5 @@
 = My AI journey (so far)
-Kieran Potts, 18 November 2026
+Kieran Potts, 22 November 2026
 :description: A snapshot of how I work with AI coding agents in late 2026.
 :docinfo: shared
 :nofooter:
@@ -22,13 +22,17 @@ Kieran Potts, 18 November 2026
 
 I've spent much of 2026 rethinking how I work. This post is a snapshot of where I'm at now. New models, harnesses, and tools arrive every day, but the broad categories they fall into look increasingly stable. Meanwhile, my new ways of working are settling into a consistent pattern. So it's time to do a write-up.
 
-It has been fun. AI has revived my love of programming. I no longer work alone on my pet projects. Even when I'm solo, it feels like collaboration. Plus, I can onboard into unfamiliar problem spaces and existing codebases much faster than I ever could before. And it is easier to learn new languages, and get better at familiar ones, on-the-job. (I'm loving getting Kotlin right now!)
+It has been fun. AI has revived my love of programming. I no longer work alone on my pet projects. Even when I'm working solo, it feels like collaboration. It's a less lonely craft.
 
-I made one assumption at the start of this journey, that getting the most out of AI tools will require doubling down on classic engineering methods, not discarding them. Well-defined constraints and requirements, considered design, construction in small increments, automated tests, and plentiful feedback loops. I expected AI to displace none of these, and I designed by AI-assisted development workflow accordingly.
+Plus, I can onboard into unfamiliar problem spaces and existing codebases much faster than I ever could before. And it is easier to learn new languages, and get better at familiar ones, on-the-job. (I'm loving getting to know Kotlin right now!)
 
-This assumption has held true. If anything, evergreen principles of good software engineering carry more weight than ever. Structured engineering practices produce structured artifacts that provide valuable knowledge to LLMs via context. xxxxx
+I made one assumption at the start of this journey, which is that getting the most out of AI tools will require doubling down on classic engineering methods — not discarding them. Well-defined requirements, considered architectural trade-offs, construction in small increments, iterative design, automated tests, and plentiful feedback loops and decisions grounded in data — not least real-world user experience of working software. I expected AI to displace none of these, and I designed by AI-assisted development workflow accordingly.
 
-== My current toolkit
+This assumption has held true. If anything, evergreen principles of good software engineering carry more weight than ever. Structured engineering practices produce structured artifacts that provide valuable knowledge to LLMs via context. The better the written record of a system, the better the agent's work, because an agent can only act on what it's been given.
+
+The rest of this post is about how I put this into practice.
+
+== My current AI toolkit
 
 I work in two modes, with a different toolkit for each.
 
@@ -37,8 +41,6 @@ For at-keyboard work I mostly use {link-claude-code}[Claude Code] in VS Code, Ze
 Even with real-time oversight, I want to keep agents isolated from my host system. So I always open my code repositories in a devcontainer (which I also load Claude Code CLI into). Only my workspace directory is mounted from the host, not the rest of my home directory, and agents run as a non-root user. There is no Docker in the container and no route to the host's Docker daemon, since access to that amounts to root on the host.
 
 Previously, I had locked agents out of using Git inside the container. I would review all changes from the dirty working tree before committing myself from the host. I've relaxed this, recently. I now use `AGENTS.md` files to instruct agents _not_ to commit anything, and they mostly follow that rule. Where they do not, it's an easy job to revert the revision if I'm not happy with it. It is more convenient for me to commit from inside the container, but a consequence is that I now mount my `~/.ssh` directory into the container. It's read-only, but I make sure the mounted private key is used solely for GitHub/GitLab authorization — in case it should be compromised. There's some risk here, and I would not do this for commercial projects. My GPG signing key stays on the host, at least — the container only uses the host's `gpg-agent` and a copy of my public keyring.
-
-// *** UP TO HERE ***
 
 I always work in a devcontainer. There is one container for my whole personal workspace, with every repository mounted into it. Agents run inside that container as a non-root user. There is no Docker in there, because access to the host's Docker daemon amounts to root on the host.
 
